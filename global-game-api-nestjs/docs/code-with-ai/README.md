@@ -1,7 +1,12 @@
 # Code with generative AI
 
-## Purpose
-I will code step by step a new web api in TypeScript with NestJs
+# Dev Board
 
-## How to use
-I will create a readme by commit with the used prompts
+## step1 init project with Ai
+- read 01_feat(project):_InitProject.md
+- check commits : 
+    . feat(project): initProject
+    . feat(project): add player domain code manually
+
+## step2 rearrange the project structure as i want
+- separate api/module/service and remove tests files
