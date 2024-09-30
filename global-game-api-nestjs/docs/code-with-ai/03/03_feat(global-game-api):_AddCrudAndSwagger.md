@@ -1,5 +1,5 @@
 # 03_feat(global-game-api):_AddCrudAndSwagger
-`add global-game-api-nestjs_Step01.zip in attachement for ChatGpt`
+`add global-game-api-nestjs_Step01_Result.zip in attachement for ChatGpt`
 
 ## Request01 Add CRUD Player controller :
 
