@@ -55,8 +55,42 @@ export class PlayersService {
     const newPlayer: Player = {
       ...player,
       id: (this.players.length + 1).toString(),
+      creationDate: new Date(),
+      updateDate: new Date(),
     };
     this.players.push(newPlayer);
     return newPlayer;
+  }
+
+  updatePlayer(id: string, updatedData: Omit<Player, 'id'>): Player {
+    const index = this.players.findIndex((player) => player.id === id);
+    if (index === -1) {
+      throw new NotFoundException(`Player with id ${id} not found`);
+    }
+    const updatedPlayer = {
+      ...this.players[index],
+      ...updatedData,
+      updateDate: new Date(),
+    };
+    this.players[index] = updatedPlayer;
+    return updatedPlayer;
+  }
+
+  deletePlayer(id: string): void {
+    const index = this.players.findIndex((player) => player.id === id);
+    if (index === -1) {
+      throw new NotFoundException(`Player with id ${id} not found`);
+    }
+    this.players.splice(index, 1);
+  }
+
+  deactivatePlayer(id: string): Player {
+    const index = this.players.findIndex((player) => player.id === id);
+    if (index === -1) {
+      throw new NotFoundException(`Player with id ${id} not found`);
+    }
+    this.players[index].isActive = false;
+    this.players[index].updateDate = new Date();
+    return this.players[index];
   }
 }
