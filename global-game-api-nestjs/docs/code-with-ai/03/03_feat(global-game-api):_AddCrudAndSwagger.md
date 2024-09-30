@@ -1,3 +1,6 @@
+# 03_feat(global-game-api):_AddCrudAndSwagger
+`add global-game-api-nestjs_Step01.zip in attachement for ChatGpt`
+
 ## Request01 Add CRUD Player controller :
 
 **Directive 01**: Analyze the entire attached project, focusing only on TypeScript files.
@@ -54,3 +57,24 @@ The script should automate the update process, ensuring that the new files and c
 Include any necessary steps for installing dependencies, running migrations, and ensuring the project is fully built and runnable after the modifications.
 Ensure the script is well-structured, contains comments for clarity, and handles potential errors gracefully to avoid disrupting the update process.
 The goal is to have a single command that applies all the modifications and sets up the project to run smoothly with your proposed enhancements.
+
+
+## Request05 Add find all players end point
+
+**Task**: Update `players.model.mapper.ts` and `players.service.ts` to implement a new `findAll` endpoint.
+
+- **Requirements**: 
+  - Modify `players.model.mapper.ts` to include the necessary logic for mapping data to and from the format required by the new `findAll` endpoint.
+  - Update `players.service.ts` to add a `findAll` method, ensuring it retrieves and returns all player records from the data source.
+- Ensure the `findAll` endpoint adheres to the existing code structure and practices, including proper error handling and consistent formatting.
+- Provide any necessary adjustments to other parts of the project (e.g., DTOs, controller) to support the integration of the `findAll` functionality.
+
+----------------------------------------------------------
+
+## Manual update
+ - Modify Deactivate endpoint to work without dto in request
+
+----------------------------------------------------------
+
+## Run & Test manually
+- yarn start and go http://127.0.0.1:3000/api/docs
