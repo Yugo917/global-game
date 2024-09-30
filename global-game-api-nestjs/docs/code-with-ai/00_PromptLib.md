@@ -22,3 +22,6 @@ As an expert in creating prompts for ChatGPT and an experienced backend develope
 - Scan the entire project structure provided as an attachment and analyze the content of each file.
 - Can you generate a prompt that would create exactly the project provided in the attachment, knowing that you cannot use the content of the files in your prompt?
 ---
+
+# Export response as a bash
+As an expert backend developer, generate a shell script (install.sh) that will apply the proposed modifications to my project.
