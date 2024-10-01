@@ -25,3 +25,7 @@ As an expert in creating prompts for ChatGPT and an experienced backend develope
 
 # Export response as a bash
 As an expert backend developer, generate a shell script (install.sh) that will apply the proposed modifications to my project.
+
+---
+# Details reponse for a bulk attachement entries
+**Instructions**: Take your time and generate a detailed response for each file separately.

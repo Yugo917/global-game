@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty } from 'class-validator';
 
 export class PlayerApiDtoV1 {
   @ApiProperty({ description: 'Unique identifier of the player' })
@@ -25,19 +26,24 @@ export class PlayerApiDtoV1 {
 
 export class PlayerCreateApiV1 {
   @ApiProperty({ description: 'URI of the player avatar' })
+  @IsNotEmpty()
   avatarUri: string;
 
   @ApiProperty({ description: 'Country of the player' })
+  @IsNotEmpty()
   country: string;
 }
 
 export class PlayerUpdateApiV1 {
   @ApiProperty({ description: 'URI of the player avatar' })
+  @IsNotEmpty()
   avatarUri: string;
 
   @ApiProperty({ description: 'Country of the player' })
+  @IsNotEmpty()
   country: string;
 
   @ApiProperty({ description: 'Flag indicating if the player is banned' })
+  @IsNotEmpty()
   isBanned: boolean;
 }
