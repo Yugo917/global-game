@@ -1,4 +1,4 @@
-# 🤖 Code with Generative AI
+# 🤖 Code with Generative AI with ChatGpt 4
 
 A step-by-step guide to building a web API in TypeScript using NestJS, assisted by ChatGPT.
 
@@ -44,3 +44,11 @@ Each development step has its own Git commit and documentation, enabling you to 
 
 - **03 - CRUD & Swagger Integration**  
   Implement CRUD operations and integrate Swagger for API documentation. [Read more](./docs/code-with-ai/03).
+
+Voici une version légèrement retravaillée pour garder ce ton affirmatif et fun :
+
+## 🎯 Conclusion
+
+You're no longer just a coder. **You're an architect and reviewer!!!** 🤣💥
+
+Welcome to your new role. **Code less. Review more.**

@@ -1,20 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Type } from 'class-transformer';
-
-// Player model for the service layer
-export class Player {
-  id: string;
-  avatarUri: string;
-  country: string;
-  isBanned: boolean;
-  isActive: boolean;
-
-  @Type(() => Date)
-  updateDate: Date;
-
-  @Type(() => Date)
-  creationDate: Date;
-}
+import { Player } from './player.models';
 
 @Injectable()
 export class PlayersService {
@@ -39,11 +24,11 @@ export class PlayersService {
     },
   ];
 
-  findAll(): Player[] {
+  public findAll(): Player[] {
     return this.players;
   }
 
-  findOne(id: string): Player {
+  public findOne(id: string): Player {
     const player = this.players.find((player) => player.id === id);
     if (!player) {
       throw new NotFoundException(`Player with id ${id} not found`);
@@ -51,7 +36,7 @@ export class PlayersService {
     return player;
   }
 
-  createPlayer(player: Omit<Player, 'id'>): Player {
+  public createPlayer(player: Omit<Player, 'id'>): Player {
     const newPlayer: Player = {
       ...player,
       id: (this.players.length + 1).toString(),
@@ -62,7 +47,7 @@ export class PlayersService {
     return newPlayer;
   }
 
-  updatePlayer(id: string, updatedData: Omit<Player, 'id'>): Player {
+  public updatePlayer(id: string, updatedData: Omit<Player, 'id'>): Player {
     const index = this.players.findIndex((player) => player.id === id);
     if (index === -1) {
       throw new NotFoundException(`Player with id ${id} not found`);
@@ -76,7 +61,7 @@ export class PlayersService {
     return updatedPlayer;
   }
 
-  deletePlayer(id: string): void {
+  public deletePlayer(id: string): void {
     const index = this.players.findIndex((player) => player.id === id);
     if (index === -1) {
       throw new NotFoundException(`Player with id ${id} not found`);
@@ -84,7 +69,7 @@ export class PlayersService {
     this.players.splice(index, 1);
   }
 
-  deactivatePlayer(id: string): Player {
+  public deactivatePlayer(id: string): Player {
     const index = this.players.findIndex((player) => player.id === id);
     if (index === -1) {
       throw new NotFoundException(`Player with id ${id} not found`);

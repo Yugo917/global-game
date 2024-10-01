@@ -1,3 +1,7 @@
+# ❌ 04_feat(global-game-api):_AddUnitTests with the project zip file
+when you want to process several files with a details questions it's not working
+and it's not work with 01-preview
+
 # 04_feat(global-game-api):_AddUnitTests
 `add global-game-api-nestjs_Step03_Result.zip in attachement for ChatGpt`
 
@@ -80,3 +84,14 @@ describe("MyClassToTest", () => {
 ```
 
 Ensure that test coverage is comprehensive and error cases are properly handled.
+
+---
+
+# Request 02 enhance the previous responses
+**Instructions**: Take your time and generate a detailed response for each file separately.
+
+- **Be exhaustive in use cases**: Ensure that all functionalities of each class are thoroughly tested. Cover a wide range of scenarios, including successful cases, edge cases, and potential failure conditions.
+- **Comprehensive testing**: Provide a thorough set of tests for every method in each class, ensuring that all possible behaviors and code paths are validated.
+- Clearly structure your response, focusing on one file at a time, and include appropriate explanations for the test scenarios covered.
+
+

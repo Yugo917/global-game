@@ -1,7 +1,7 @@
 import { plainToInstance } from "class-transformer";
-import { Player } from "./players.service";
 import { PlayerApiDtoV1, PlayerCreateApiV1, PlayerUpdateApiV1 } from "../api/players.models.dto";
 import { Injectable } from "@nestjs/common";
+import { Player } from "./player.models";
 
 @Injectable()
 export class PlayerMapper {
