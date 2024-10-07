@@ -1,81 +1,88 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Player } from './player.models';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import { IPlayerDocument, PlayerDocument, Playerv1CollectionName } from "./player.schema";
+import { Player } from "./player.models";
+import { v4 as uuidv4 } from "uuid";
+import { DbPlayerMapper } from "./players.db.model.mapper";
+
+export interface IPlayersService {
+  findAll(): Promise<Player[]>;
+  findOne(id: string): Promise<Player>;
+  createPlayer(playerData: Omit<Player, "id">): Promise<Player>;
+  updatePlayer(id: string, updatedData: Omit<Player, "id">): Promise<Player>;
+  deletePlayer(id: string): Promise<void>;
+  deactivatePlayer(id: string): Promise<Player>;
+}
 
 @Injectable()
-export class PlayersService {
-  private players: Player[] = [
-    {
-      id: '1',
-      avatarUri: 'https://example.com/avatar1.png',
-      country: 'USA',
-      isBanned: false,
-      isActive: true,
-      updateDate: new Date(),
-      creationDate: new Date(),
-    },
-    {
-      id: '2',
-      avatarUri: 'https://example.com/avatar2.png',
-      country: 'Canada',
-      isBanned: false,
-      isActive: true,
-      updateDate: new Date(),
-      creationDate: new Date(),
-    },
-  ];
+export class PlayersService implements IPlayersService {
+  constructor(
+    @InjectModel(Playerv1CollectionName) private readonly playerModel: Model<PlayerDocument>,
+  ) { }
 
-  public findAll(): Player[] {
-    return this.players;
+  public async findAll(): Promise<Player[]> {
+    const res = await this.playerModel.find().lean().exec();
+    return res.map(m => DbPlayerMapper.mapToEntity(m));
   }
 
-  public findOne(id: string): Player {
-    const player = this.players.find((player) => player.id === id);
+  public async findOne(id: string): Promise<Player> {
+    const player = await this.playerModel.findOne({ playerId: id }).lean().exec();
     if (!player) {
       throw new NotFoundException(`Player with id ${id} not found`);
     }
-    return player;
+    return DbPlayerMapper.mapToEntity(player);
   }
 
-  public createPlayer(player: Omit<Player, 'id'>): Player {
-    const newPlayer: Player = {
-      ...player,
-      id: (this.players.length + 1).toString(),
+  public async createPlayer(playerData: Omit<Player, "id">): Promise<Player> {
+    const newPlayer: IPlayerDocument = {
+      ...playerData,
+      playerId: uuidv4(),
+      isActive: true,
+      isBanned: false,
       creationDate: new Date(),
-      updateDate: new Date(),
+      updateDate: new Date()
     };
-    this.players.push(newPlayer);
-    return newPlayer;
+    await this.playerModel.insertMany([newPlayer]);
+    return await this.findOne(newPlayer.playerId);
   }
 
-  public updatePlayer(id: string, updatedData: Omit<Player, 'id'>): Player {
-    const index = this.players.findIndex((player) => player.id === id);
-    if (index === -1) {
+  public async updatePlayer(id: string, updatedData: Omit<Player, "id">): Promise<Player> {
+    const player = await this.playerModel.findOneAndUpdate(
+      { playerId: id },
+      {
+        ...updatedData,
+        updateDate: new Date()
+      },
+      { new: true },
+    ).exec();
+
+    if (!player) {
       throw new NotFoundException(`Player with id ${id} not found`);
     }
-    const updatedPlayer = {
-      ...this.players[index],
-      ...updatedData,
-      updateDate: new Date(),
-    };
-    this.players[index] = updatedPlayer;
-    return updatedPlayer;
+    return DbPlayerMapper.mapToEntity(player);
   }
 
-  public deletePlayer(id: string): void {
-    const index = this.players.findIndex((player) => player.id === id);
-    if (index === -1) {
+  public async deletePlayer(id: string): Promise<void> {
+    const result = await this.playerModel.deleteOne({ playerId: id }).exec();
+    if (result.deletedCount == 0) {
       throw new NotFoundException(`Player with id ${id} not found`);
     }
-    this.players.splice(index, 1);
   }
 
-  public deactivatePlayer(id: string): Player {
-    const index = this.players.findIndex((player) => player.id === id);
-    if (index === -1) {
+  public async deactivatePlayer(id: string): Promise<Player> {
+    const player = await this.playerModel.findOneAndUpdate(
+      { playerId: id },
+      {
+        isActive: false,
+        updateDate: new Date()
+      },
+      { new: true },
+    ).exec();
+
+    if (!player) {
       throw new NotFoundException(`Player with id ${id} not found`);
     }
-    this.players[index].isActive = false;
-    this.players[index].updateDate = new Date();
-    return this.players[index];
+    return DbPlayerMapper.mapToEntity(player);
   }
 }
