@@ -1,5 +1,16 @@
 # 01_feat(project):_InitProject
 
+---------------------------------------------------------------------------
+# Resluts:
+
+Result Quality : 5/5
+Need human fix : 1/5
+Pros : really good to start with an unknow api framework and to have a runnable scaffold project
+Cons : NUll
+
+---------------------------------------------------------------------------
+# Prompts: 
+
 ## Request01 (Orientation):
 
 Act as a backend developer experienced in Node.js, NestJS, and TypeScript, specializing in code scalability and maintainability. Adhere to SOLID principles, clean code, and clean architecture.

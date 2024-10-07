@@ -29,3 +29,11 @@ As an expert backend developer, generate a shell script (install.sh) that will a
 ---
 # Details reponse for a bulk attachement entries
 **Instructions**: Take your time and generate a detailed response for each file separately.
+
+---
+# ChatGpt clarification 
+- If you need any clarification or further guidance, please ask.
+
+---
+# Analyse files and keep in the memory 
+Analyze the TypeScript files attached and retain the relevant code in your memory for future reference. Once the analysis is complete, please confirm by responding with 'Done'."

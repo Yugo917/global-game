@@ -1,6 +1,17 @@
 # 03_feat(global-game-api):_AddCrudAndSwagger
 `add global-game-api-nestjs_Step01_Result.zip in attachement for ChatGpt`
 
+---------------------------------------------------------------------------
+# Resluts:
+
+Result Quality : 5/5
+Need human fix : 1/5
+Pros : really good to start with an unknow api framework and to have a runnable scaffold project
+Cons : NUll
+
+---------------------------------------------------------------------------
+# Prompts: 
+
 ## Request01 Add CRUD Player controller :
 
 **Directive 01**: Analyze the entire attached project, focusing only on TypeScript files.
