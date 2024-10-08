@@ -3,14 +3,20 @@ import { AppModule } from "./app.module";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { ValidationPipe } from "@nestjs/common";
 
-async function bootstrap() {
+export const getAppValidationPipe = (): ValidationPipe => new ValidationPipe({
+  whitelist: true,   // Remove properties not present in the DTO
+  forbidNonWhitelisted: true, // Throw an error if extra properties are provided
+  transform: false    // Automatically transform payloads to the expected DTO types
+});
+
+async function bootstrap(): Promise<void> {
   // eslint-disable-next-line no-console
   console.log("⚠️ - The project need to be run on Node V20.9.0");
 
   const app = await NestFactory.create(AppModule);
 
   // Validation pipe
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(getAppValidationPipe());
 
   // Set up Swagger options
   const config = new DocumentBuilder()
@@ -23,7 +29,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
 
   // Set up Swagger UI endpoint
-  SwaggerModule.setup("api/docs", app, document);
+  SwaggerModule.setup("swagger", app, document);
 
   await app.listen(3000);
 

@@ -14,3 +14,15 @@ export class Player {
   @Type(() => Date)
   creationDate: Date;
 }
+
+
+export class CreatePlayer {
+  avatarUri: string;
+  country: string;
+}
+
+export class UpdatePlayer {
+  avatarUri: string;
+  country: string;
+  isBanned: boolean;
+}

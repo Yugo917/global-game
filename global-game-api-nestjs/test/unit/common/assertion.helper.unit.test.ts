@@ -58,6 +58,7 @@ describe("isNullOrUndefinedOrEmpty", () => {
 
     test("WithEmptyArray_ShouldReturnFalse", () => {
         // Arrange
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const value: any[] = [];
 
         // Act

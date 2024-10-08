@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { PlayersService } from "../service/players.service";
+import { PlayersService } from "../service/player.service";
 import { PlayersController } from "../api/players.controller";
 import { ApiPlayerMapper } from "../api/players.api.model.mapper";
 import { MongooseModule } from "@nestjs/mongoose";
