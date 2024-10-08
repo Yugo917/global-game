@@ -3,7 +3,7 @@ import { ApiPlayerMapper } from "src/players/api/players.api.model.mapper";
 import { PlayersController } from "src/players/api/players.controller";
 import { PlayerCreateApiV1, PlayerUpdateApiV1 } from "src/players/api/players.models.dto";
 import { Player } from "src/players/service/player.models";
-import { PlayersService } from "src/players/service/players.service";
+import { PlayersService } from "src/players/service/player.service";
 
 describe("PlayersController", () => {
     let controller: PlayersController;
@@ -88,7 +88,8 @@ describe("PlayersController", () => {
 
         };
         const createdPlayer: Player = {
-            ...playerCreateDto,
+            avatarUri: playerCreateDto.avatarUri,
+            country: playerCreateDto.country,
             id: "123",
             isBanned: false,
             isActive: true,
@@ -114,7 +115,9 @@ describe("PlayersController", () => {
         };
         const updatedPlayer: Player = {
             id: playerId,
-            ...updateDto,
+            avatarUri: updateDto.avatarUri,
+            country: updateDto.country,
+            isBanned: updateDto.isBanned,
             isActive: true,
             updateDate: new Date(),
             creationDate: new Date()

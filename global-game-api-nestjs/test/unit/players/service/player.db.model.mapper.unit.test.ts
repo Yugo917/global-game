@@ -36,7 +36,8 @@ describe("DbPlayerMapper", () => {
         const playerDocument = null;
 
         // Act
-        const action = () => DbPlayerMapper.mapToEntity(playerDocument as any);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const action = (): Player => DbPlayerMapper.mapToEntity(playerDocument as any);
 
         // Assert
         expect(action).toThrow("playerDocument is required");
@@ -47,7 +48,7 @@ describe("DbPlayerMapper", () => {
         const playerDocument = {} as IPlayerDocument;
 
         // Act
-        const action = () => DbPlayerMapper.mapToEntity(playerDocument);
+        const action = (): Player => DbPlayerMapper.mapToEntity(playerDocument);
 
         // Assert
         expect(action).toThrow("playerDocument is required");

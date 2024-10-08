@@ -45,7 +45,14 @@ Each development step has its own Git commit and documentation, enabling you to 
 - **03 - CRUD & Swagger Integration**  
   Implement CRUD operations and integrate Swagger for API documentation. [Read more](./docs/code-with-ai/03).
 
-Voici une version légèrement retravaillée pour garder ce ton affirmatif et fun :
+- **04 - Add Unit Tests**  
+Add test unit for controller and service layer. [Read more](./docs/code-with-ai/04).
+
+- **05 - Add Persitency on MONGODB**  
+Add persitency on MONGODB and update the service layer code. [Read more](./docs/code-with-ai/05).
+
+- **05 - Add Integration Tests**  
+Add integration test and update and fix code regarding the integration tests. [Read more](./docs/code-with-ai/06).
 
 ## 🎯 Conclusion
 

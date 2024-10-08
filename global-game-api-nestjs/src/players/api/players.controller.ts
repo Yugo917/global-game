@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Post, Body, Put, Delete, Patch } from "@nestjs/common";
-import { PlayersService } from "../service/players.service";
+import { PlayersService } from "../service/player.service";
 import { PlayerApiDtoV1, PlayerCreateApiV1, PlayerUpdateApiV1 } from "./players.models.dto";
 import { ApiPlayerMapper } from "./players.api.model.mapper";
 import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";

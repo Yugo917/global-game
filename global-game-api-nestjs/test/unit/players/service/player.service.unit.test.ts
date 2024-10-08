@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Test, TestingModule } from "@nestjs/testing";
 import { getModelToken } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { NotFoundException } from "@nestjs/common";
-import { PlayersService } from "src/players/service/players.service";
-import { PlayerDocument, Playerv1CollectionName } from "src/players/service/player.schema";
+import { PlayersService } from "src/players/service/player.service";
+import { IPlayerDocument, PlayerDocument, Playerv1CollectionName } from "src/players/service/player.schema";
 
-describe("PlayersService", () => {
+describe("PlayersService (Unit)", () => {
   let service: PlayersService;
   let model: Model<PlayerDocument>;
 
@@ -37,7 +39,7 @@ describe("PlayersService", () => {
 
   test("findAll_ShouldReturnListOfPlayers", async () => {
     // Arrange
-    const playerDocuments = [
+    const playerDocuments: IPlayerDocument[] = [
       { playerId: "123", avatarUri: "http://example.com/avatar.png", country: "US", isBanned: false, isActive: true, updateDate: new Date(), creationDate: new Date() }
     ];
     jest.spyOn(model, "find").mockReturnValue({
@@ -56,7 +58,7 @@ describe("PlayersService", () => {
   test("findOne_WithExistingId_ShouldReturnPlayer", async () => {
     // Arrange
     const playerId = "123";
-    const playerDocument = { playerId, avatarUri: "http://example.com/avatar.png", country: "US", isBanned: false, isActive: true, updateDate: new Date(), creationDate: new Date() };
+    const playerDocument: IPlayerDocument = { playerId, avatarUri: "http://example.com/avatar.png", country: "US", isBanned: false, isActive: true, updateDate: new Date(), creationDate: new Date() };
     jest.spyOn(model, "findOne").mockReturnValue({
       lean: jest.fn().mockReturnThis(),
       exec: jest.fn().mockResolvedValue(playerDocument)
@@ -83,19 +85,18 @@ describe("PlayersService", () => {
 
   test("createPlayer_WithValidData_ShouldReturnNewPlayer", async () => {
     // Arrange
-    const playerData = { avatarUri: "http://example.com/avatar.png", country: "US", isBanned: false, isActive: true, updateDate: new Date(), creationDate: new Date() };
-    const playerDocument = { ...playerData, playerId: "123" };
-    jest.spyOn(model, "insertMany").mockResolvedValue(playerDocument as any);
+    const playerData: IPlayerDocument = { playerId: "123", avatarUri: "http://example.com/avatar.png", country: "US", isBanned: false, isActive: true, updateDate: new Date(), creationDate: new Date() };
+    jest.spyOn(model, "insertMany").mockResolvedValue(playerData as any);
     jest.spyOn(model, "findOne").mockReturnValue({
       lean: jest.fn().mockReturnThis(),
-      exec: jest.fn().mockResolvedValue(playerDocument)
+      exec: jest.fn().mockResolvedValue(playerData)
     } as any);
 
     // Act
     const result = await service.createPlayer(playerData as any);
 
     // Assert
-    expect(result.id).toBe(playerDocument.playerId);
+    expect(result.id).toBe(playerData.playerId);
   });
 
   test("deletePlayer_WithExistingId_ShouldSucceed", async () => {

@@ -18,10 +18,29 @@ module.exports = {
   ignorePatterns: ['.eslintrc.js'],
   rules: {
     // Install
-    '@typescript-eslint/interface-name-prefix': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "interface",
+        "format": ["PascalCase"],
+        "custom": {
+          "regex": "^I[A-Z]",
+          "match": true
+        }
+      }
+    ],
+    "@typescript-eslint/explicit-function-return-type": "error",
+    '@typescript-eslint/explicit-module-boundary-types': 'error',
+    '@typescript-eslint/no-explicit-any': 'error',
+    "@typescript-eslint/no-inferrable-types": "off", // Désactiver la règle qui empêche l'inférence de type
+    "@typescript-eslint/typedef": [
+      "error",
+      {
+        "variableDeclaration": false,
+        "arrowParameter": false,
+        "propertyDeclaration": true
+      }
+    ],
     "prettier/prettier": 0,
     "require-await": "error",
     //CodeQuality
@@ -53,18 +72,23 @@ module.exports = {
     "@typescript-eslint/no-use-before-define": [
       "off"
     ],
-    "@typescript-eslint/explicit-function-return-type": [
-      "off",
-      {
-        "allowExpressions": true
-      }
-    ],
     "import/no-default-export": "off",
     "import/prefer-default-export": "off",
     "import/extensions": "off",
     "import/no-unresolved": "off",
     "import/no-extraneous-dependencies": "off",
     "import/no-named-default": "off",
+    'no-restricted-syntax': [
+      'error',
+      {
+        selector: 'SpreadElement',
+        message: 'The spread operator is not allowed.',
+      },
+      {
+        selector: 'RestElement',
+        message: 'The rest operator is not allowed.',
+      },
+    ],
     //CodeStyle
     "max-classes-per-file": "off",
     "max-len": "off",

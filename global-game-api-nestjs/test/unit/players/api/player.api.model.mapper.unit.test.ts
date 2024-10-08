@@ -40,10 +40,11 @@ describe("ApiPlayerMapper", () => {
         const player = null;
 
         // Act
-        const action = () => mapper.mapToApiDto(player as any);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const action = (): PlayerApiDtoV1 => mapper.mapToApiDto(player as any);
 
         // Assert
-        expect(action).toThrow("playerDocument is required");
+        expect(action).toThrow("player is required");
     });
 
     test("mapToEntity_WithValidPlayerCreateDto_ShouldSucceed", () => {
@@ -69,9 +70,10 @@ describe("ApiPlayerMapper", () => {
         const createPlayerDto = null;
 
         // Act
-        const action = () => mapper.mapToEntity(createPlayerDto as any);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const action = (): Player => mapper.mapToEntity(createPlayerDto as any);
 
         // Assert
-        expect(action).toThrow("playerDocument is required");
+        expect(action).toThrow("createPlayerDto is required");
     });
 });

@@ -7,5 +7,5 @@
         "source.fixAll": "explicit"
     },
     "jestrunner.jestCommand": "yarn test:jest-runner",
-    "jestrunner.configPath": "./test/jest-unit.json"
+    "jestrunner.configPath": "./test/jest.config.js"
 }

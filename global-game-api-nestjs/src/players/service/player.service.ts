@@ -2,11 +2,12 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { IPlayerDocument, PlayerDocument, Playerv1CollectionName } from "./player.schema";
-import { Player } from "./player.models";
+import { CreatePlayer, Player, UpdatePlayer } from "./player.models";
 import { v4 as uuidv4 } from "uuid";
 import { DbPlayerMapper } from "./players.db.model.mapper";
 
-export interface IPlayersService {
+
+export interface IPlayerService {
   findAll(): Promise<Player[]>;
   findOne(id: string): Promise<Player>;
   createPlayer(playerData: Omit<Player, "id">): Promise<Player>;
@@ -16,7 +17,7 @@ export interface IPlayersService {
 }
 
 @Injectable()
-export class PlayersService implements IPlayersService {
+export class PlayersService implements IPlayerService {
   constructor(
     @InjectModel(Playerv1CollectionName) private readonly playerModel: Model<PlayerDocument>,
   ) { }
@@ -34,9 +35,10 @@ export class PlayersService implements IPlayersService {
     return DbPlayerMapper.mapToEntity(player);
   }
 
-  public async createPlayer(playerData: Omit<Player, "id">): Promise<Player> {
+  public async createPlayer(createPlayer: CreatePlayer): Promise<Player> {
     const newPlayer: IPlayerDocument = {
-      ...playerData,
+      avatarUri: createPlayer.avatarUri,
+      country: createPlayer.country,
       playerId: uuidv4(),
       isActive: true,
       isBanned: false,
@@ -47,11 +49,13 @@ export class PlayersService implements IPlayersService {
     return await this.findOne(newPlayer.playerId);
   }
 
-  public async updatePlayer(id: string, updatedData: Omit<Player, "id">): Promise<Player> {
+  public async updatePlayer(id: string, updatedData: UpdatePlayer): Promise<Player> {
     const player = await this.playerModel.findOneAndUpdate(
       { playerId: id },
       {
-        ...updatedData,
+        avatarUri: updatedData.avatarUri,
+        country: updatedData.country,
+        isBanned: updatedData.isBanned,
         updateDate: new Date()
       },
       { new: true },
