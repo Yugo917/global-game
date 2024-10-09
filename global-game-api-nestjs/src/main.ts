@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
@@ -10,7 +11,6 @@ export const getAppValidationPipe = (): ValidationPipe => new ValidationPipe({
 });
 
 async function bootstrap(): Promise<void> {
-  // eslint-disable-next-line no-console
   console.log("⚠️ - The project need to be run on Node V20.9.0");
 
   const app = await NestFactory.create(AppModule);
@@ -33,10 +33,8 @@ async function bootstrap(): Promise<void> {
 
   await app.listen(3000);
 
-
-  // eslint-disable-next-line no-console
   console.log("✔️ - Server is running on port 3000");
-  // eslint-disable-next-line no-console
   console.log("🔗 -  App : http://localhost:3000/swagger");
+  console.log("🔗 -  Kibana : http://localhost:5701");
 }
 bootstrap();

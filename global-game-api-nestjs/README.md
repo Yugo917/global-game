@@ -21,8 +21,9 @@ Follow these steps to set up and run the project:
    yarn start
    ```
 
-3. **Access the API Documentation**  
-   Open [http://127.0.0.1:3000/api/docs](http://127.0.0.1:3000/api/docs) in your browser.
+3. **Play with It**  
+   - Open Swagger : [http://127.0.0.1:3000/swagger](http://127.0.0.1:3000/swagger) in your browser.
+   - Open Kibana : [http://localhost:5701](http://localhost:5701) in your browser.
 
 ## 📚 How to Navigate the Repository
 
@@ -51,10 +52,10 @@ Add test unit for controller and service layer. [Read more](./docs/code-with-ai/
 - **05 - Add Persitency on MONGODB**  
 Add persitency on MONGODB and update the service layer code. [Read more](./docs/code-with-ai/05).
 
-- **05 - Add Integration Tests**  
+- **06 - Add Integration Tests**  
 Add integration test and update and fix code regarding the integration tests. [Read more](./docs/code-with-ai/06).
 
-## 🎯 Conclusion
+## 🎯 Conclusion 
 
 You're no longer just a coder. **You're an architect and reviewer!!!** 🤣💥
 
