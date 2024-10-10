@@ -2,27 +2,27 @@ import { Type } from "class-transformer";
 
 // Player model for the service layer
 export class Player {
-  id: string;
-  avatarUri: string;
-  country: string;
-  isBanned: boolean;
-  isActive: boolean;
+  public id: string;
+  public avatarUri: string;
+  public country: string;
+  public isBanned: boolean;
+  public isActive: boolean;
 
   @Type(() => Date)
-  updateDate: Date;
+  public updateDate: Date;
 
   @Type(() => Date)
-  creationDate: Date;
+  public creationDate: Date;
 }
 
 
 export class CreatePlayer {
-  avatarUri: string;
-  country: string;
+  public avatarUri: string;
+  public country: string;
 }
 
 export class UpdatePlayer {
-  avatarUri: string;
-  country: string;
-  isBanned: boolean;
+  public avatarUri: string;
+  public country: string;
+  public isBanned: boolean;
 }

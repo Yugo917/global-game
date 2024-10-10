@@ -4,19 +4,19 @@ import { Inject } from "@nestjs/common";
 import { LoggerService } from "@nestjs/common";
 
 class HpptMessageMetadata {
-    httpMethod: string;
-    httpUrl: string;
-    httpResponseStatusCode: string;
-    httpElapsed: string;
-    HttpErrorMessage: string | undefined;
+    public httpMethod: string;
+    public httpUrl: string;
+    public httpResponseStatusCode: string;
+    public httpElapsed: string;
+    public HttpErrorMessage: string | undefined;
 }
 
 @Injectable()
 export class LoggerInterceptor implements NestInterceptor {
-    constructor(@Inject("APP_LOGGER") private readonly logger: LoggerService) { }
+    public constructor(@Inject("APP_LOGGER") private readonly logger: LoggerService) { }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> {
+    public intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> {
         const now = Date.now();
         const httpMessageTemplate = "HTTP {httpMethod} {httpUrl} responded {httpResponseStatusCode} in {httpElapsed} ms";
 

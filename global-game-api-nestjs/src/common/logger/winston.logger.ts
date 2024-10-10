@@ -17,7 +17,7 @@ export class WinstonLogger implements LoggerService {
     private logger: winston.Logger;
     private logInterpolator: ILogInterpolator
 
-    constructor(
+    public constructor(
         @Inject("ILogInterpolator") logInterpolator: ILogInterpolator,
     ) {
         this.logger = this.createLogger();

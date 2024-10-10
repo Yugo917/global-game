@@ -5,64 +5,64 @@ export class PlayerApiDtoV1 {
   @ApiProperty({ description: "Unique identifier of the player" })
   @IsNotEmpty()
   @IsString()
-  id: string;
+  public id: string;
 
   @ApiProperty({ description: "URI of the player avatar" })
   @IsNotEmpty()
   @IsString()
-  avatarUri: string;
+  public avatarUri: string;
 
   @ApiProperty({ description: "Country of the player" })
   @IsNotEmpty()
   @IsString()
-  country: string;
+  public country: string;
 
   @ApiProperty({ description: "Flag indicating if the player is banned" })
   @IsNotEmpty()
   @IsBoolean()
-  isBanned: boolean;
+  public isBanned: boolean;
 
   @ApiProperty({ description: "Active status of the player" })
   @IsNotEmpty()
   @IsBoolean()
-  isActive: boolean;
+  public isActive: boolean;
 
   @ApiProperty({ description: "Last update date of the player record" })
   @IsNotEmpty()
   @IsDate()
-  updateDate: Date;
+  public updateDate: Date;
 
   @ApiProperty({ description: "Creation date of the player record" })
   @IsNotEmpty()
   @IsDate()
-  creationDate: Date;
+  public creationDate: Date;
 }
 
 export class PlayerCreateApiV1 {
   @ApiProperty({ description: "URI of the player avatar" })
   @IsNotEmpty()
   @IsString()
-  avatarUri: string;
+  public avatarUri: string;
 
   @ApiProperty({ description: "Country of the player" })
   @IsNotEmpty()
   @IsString()
-  country: string;
+  public country: string;
 }
 
 export class PlayerUpdateApiV1 {
   @ApiProperty({ description: "URI of the player avatar" })
   @IsNotEmpty()
   @IsString()
-  avatarUri: string;
+  public avatarUri: string;
 
   @ApiProperty({ description: "Country of the player" })
   @IsNotEmpty()
   @IsString()
-  country: string;
+  public country: string;
 
   @ApiProperty({ description: "Flag indicating if the player is banned" })
   @IsNotEmpty()
   @IsBoolean()
-  isBanned: boolean;
+  public isBanned: boolean;
 }

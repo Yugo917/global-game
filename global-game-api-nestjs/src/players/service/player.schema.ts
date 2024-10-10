@@ -13,13 +13,13 @@ export const PlayerV1Schema = new Schema({
 });
 
 export class PlayerDocument extends Document implements IPlayerDocument {
-  playerId: string;
-  avatarUri: string;
-  country: string;
-  isBanned: boolean;
-  isActive: boolean;
-  updateDate: Date;
-  creationDate: Date;
+  public playerId: string;
+  public avatarUri: string;
+  public country: string;
+  public isBanned: boolean;
+  public isActive: boolean;
+  public updateDate: Date;
+  public creationDate: Date;
 }
 
 export interface IPlayerDocument {

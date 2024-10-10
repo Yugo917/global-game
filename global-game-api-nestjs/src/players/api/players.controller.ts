@@ -7,7 +7,7 @@ import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
 @ApiTags("players")
 @Controller("players")
 export class PlayersController {
-  constructor(
+  public constructor(
     private readonly playersService: PlayersService,
     private readonly playerMapper: ApiPlayerMapper
   ) { }

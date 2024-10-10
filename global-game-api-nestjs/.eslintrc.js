@@ -32,7 +32,7 @@ module.exports = {
     "@typescript-eslint/explicit-function-return-type": "error",
     '@typescript-eslint/explicit-module-boundary-types': 'error',
     '@typescript-eslint/no-explicit-any': 'error',
-    "@typescript-eslint/no-inferrable-types": "off", // Désactiver la règle qui empêche l'inférence de type
+    "@typescript-eslint/no-inferrable-types": "off",
     "@typescript-eslint/typedef": [
       "error",
       {
@@ -44,6 +44,10 @@ module.exports = {
     "prettier/prettier": 0,
     "require-await": "error",
     //CodeQuality
+    "@typescript-eslint/explicit-member-accessibility": [
+      "error",
+      { "accessibility": "explicit" }
+    ],
     "no-console": "warn",
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": [
