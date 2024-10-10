@@ -18,7 +18,7 @@ export interface IPlayerService {
 
 @Injectable()
 export class PlayersService implements IPlayerService {
-  constructor(
+  public constructor(
     @InjectModel(Playerv1CollectionName) private readonly playerModel: Model<PlayerDocument>,
   ) { }
 

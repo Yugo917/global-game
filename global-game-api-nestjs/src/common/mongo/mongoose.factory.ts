@@ -6,11 +6,11 @@ import { RetryerService } from "../resilience/retryer.service";
 
 @Injectable()
 export class MongooseFactory implements MongooseOptionsFactory {
-    constructor(
+    public constructor(
         private readonly retryerService: RetryerService
     ) { }
 
-    async createMongooseOptions(): Promise<MongooseModuleOptions> {
+    public async createMongooseOptions(): Promise<MongooseModuleOptions> {
         await this.retryerService.execute(
             "mongoose.connect",
             async () => {
