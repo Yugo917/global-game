@@ -34,9 +34,17 @@ ________________________________________________________________________________
 ```
 ### Export response as a bash
 ```
+    Generate a shell script (install.sh) to create the project with all files and his proposed content to generate a runnable project.
+```
+### Export modifacation response as a bash
+```
     Generate a shell script (install.sh) that will apply the proposed modifications to my project.
 ```
-
+### Analyse library package
+```
+    Can you create a comparison table of the following libraries, including the number of stars on their GitHub repositories, the last GitCommit date, the number of monthly downloads, and their pros and cons? 
+    Use the following sources: GitHub npmtrends.com. Please present the most recent results in a table format.
+```
 
 # Gpts
 ## Prompter

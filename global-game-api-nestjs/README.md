@@ -7,23 +7,24 @@ A step-by-step guide to building a web API in TypeScript using NestJS, assisted 
 - **Build a Web API**: Create a scalable and robust web API in TypeScript with NestJS.
 - **Learn with AI**: Leverage ChatGPT to implement best practices throughout your API development.
 
-## 🛠️ Getting Started
-
-Follow these steps to set up and run the project:
-
-1. **Install Dependencies**  
-   ```bash
+## 🧪 Getting Started 
+### ⚠️ `The project need to be run on Node V20.9.0`
+- Prerequisite :
+```
+   install node V20.9.0
+```
+- Follow these steps to set up and run the project:
+```bash
    yarn install
-   ```
-
-2. **Run the Application**  
-   ```bash
+   yarn setup-dev-env
    yarn start
-   ```
-
-3. **Play with It**  
-   - Open Swagger : [http://127.0.0.1:3000/swagger](http://127.0.0.1:3000/swagger) in your browser.
-   - Open Kibana : [http://localhost:5701](http://localhost:5701) in your browser.
+   yarn test
+```
+- Play with It
+```
+   Open Swagger : http://127.0.0.1:3000/swagger
+   Open Kibana : http://localhost:5701
+``` 
 
 ## 📚 How to Navigate the Repository
 
@@ -55,8 +56,16 @@ Add persitency on MONGODB and update the service layer code. [Read more](./docs/
 - **06 - Add Integration Tests**  
 Add integration test and update and fix code regarding the integration tests. [Read more](./docs/code-with-ai/06).
 
+## ✅ Results 
+
+- A solid NestJs web api with swagger, crud, mongo persitency, resiliency, log etc ...
+- MY [Prompt Library](./docs/code-with-ai/00_PromptLib.md) created during the POC
+- Other Ai [Use Cases](./docs/code-with-ai/miscellaneous)
+
+
 ## 🎯 Conclusion 
 
 You're no longer just a coder. **You're an architect and reviewer!!!** 🤣💥
 
 Welcome to your new role. **Code less. Review more.**
+
