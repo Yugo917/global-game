@@ -4,12 +4,21 @@ db.createCollection('player-v1', {
   validator: {
     $jsonSchema: {
       bsonType: 'object',
-      required: ['playerId', 'avatarUri', 'country', 'isBanned', 'isActive', 'updateDate', 'creationDate'],
+      required: ['playerId', 'name', 'email', 'avatarUri', 'country', 'isBanned', 'isActive', 'updateDate', 'creationDate'],
       properties: {
         playerId: {
           bsonType: 'string',
           description: 'ID must be a string in UUID format and is required',
           pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$',
+        },
+        name: {
+          bsonType: 'string',
+          description: 'Name must be a string and is required',
+        },
+        email: {
+          bsonType: 'string',
+          description: 'Email must be a valid email format and is required',
+          pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'
         },
         avatarUri: {
           bsonType: 'string',
@@ -17,7 +26,8 @@ db.createCollection('player-v1', {
         },
         country: {
           bsonType: 'string',
-          description: 'Country must be a string and is required',
+          description: 'Country must be a 2-letter ISO code and is required',
+          pattern: '^[A-Z]{2}$',
         },
         isBanned: {
           bsonType: 'bool',
@@ -43,8 +53,10 @@ db.createCollection('player-v1', {
 db.getCollection('player-v1').insertMany([
   {
     playerId: 'd41d8cd9-8f00-3204-a980-001f60c5ed5f',
+    name: 'John Doe',
+    email: 'john.doe@example.com',
     avatarUri: 'https://example.com/avatar1.png',
-    country: 'USA',
+    country: 'US',
     isBanned: false,
     isActive: true,
     updateDate: new Date(),
@@ -52,8 +64,10 @@ db.getCollection('player-v1').insertMany([
   },
   {
     playerId: 'c56a4180-65aa-42ec-a945-5fd21dec0538',
+    name: 'Jane Smith',
+    email: 'jane.smith@example.com',
     avatarUri: 'https://example.com/avatar2.png',
-    country: 'Canada',
+    country: 'CA',
     isBanned: false,
     isActive: true,
     updateDate: new Date(),
@@ -65,9 +79,9 @@ db.createUser({
   user: "gg-user",
   pwd: "gg-password",
   roles: [
-      {
-          role: "readWrite",
-          db: "global-game"
-      }
+    {
+      role: "readWrite",
+      db: "global-game"
+    }
   ]
 });

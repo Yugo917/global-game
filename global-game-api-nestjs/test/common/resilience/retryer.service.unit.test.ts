@@ -1,6 +1,6 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { LoggerService } from "@nestjs/common";
-import { RetryerService } from "../../../../src/common/resilience/retryer.service";
+import { RetryerService } from "../../../src/common/resilience/retryer.service";
 
 describe("RetryerService", () => {
     let retryerService: RetryerService;

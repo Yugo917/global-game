@@ -32,12 +32,16 @@ describe("PlayersService (Integration)", () => {
         it("findAll_WithExistingPlayers_ShouldSucceed", async () => {
             // Arrange:
             const player1Data: CreatePlayer = {
+                name: uuidv4(),
+                email: `${uuidv4()}@gmail.com`,
                 avatarUri: `http://example.com/${uuidv4()}.png`,
-                country: "France"
+                country: "FR"
             };
-            const createdPlayer1 = await playersService.createPlayer(player1Data);
+            const createdPlayer1 = await playersService.create(player1Data);
             const expectedPlayer1: Player = {
                 id: createdPlayer1.id,
+                name: player1Data.name,
+                email: player1Data.email,
                 avatarUri: player1Data.avatarUri,
                 country: player1Data.country,
                 isBanned: false,
@@ -46,12 +50,16 @@ describe("PlayersService (Integration)", () => {
                 creationDate: createdPlayer1.creationDate
             }
             const player2Data: CreatePlayer = {
+                name: uuidv4(),
+                email: `${uuidv4()}@gmail.com`,
                 avatarUri: `http://example.com/${uuidv4()}.png`,
                 country: "US"
             };
-            const createdPlayer2 = await playersService.createPlayer(player2Data);
+            const createdPlayer2 = await playersService.create(player2Data);
             const expectedPlayer2: Player = {
                 id: createdPlayer2.id,
+                name: player2Data.name,
+                email: player2Data.email,
                 avatarUri: player2Data.avatarUri,
                 country: player2Data.country,
                 isBanned: false,
@@ -88,10 +96,12 @@ describe("PlayersService (Integration)", () => {
         it("findOne_WithValidId_ShouldReturnPlayer", async () => {
             // Arrange
             const player: CreatePlayer = {
+                name: uuidv4(),
+                email: `${uuidv4()}@gmail.com`,
                 avatarUri: `http://example.com/${uuidv4()}.png`,
-                country: "Canada"
+                country: "CA"
             }
-            const createdPlayer = await playersService.createPlayer(player);
+            const createdPlayer = await playersService.create(player);
 
             // Act
             const foundPlayer = await playersService.findOne(createdPlayer.id);
@@ -109,15 +119,19 @@ describe("PlayersService (Integration)", () => {
         it("create_WithValidData_ShouldReturnCreatedPlayer", async () => {
             // Arrange
             const playerData: CreatePlayer = {
+                name: uuidv4(),
+                email: `${uuidv4()}@gmail.com`,
                 avatarUri: `http://example.com/${uuidv4()}.png`,
-                country: "France"
+                country: "FR"
             };
 
             // Act
-            const createdPlayer = await playersService.createPlayer(playerData);
+            const createdPlayer = await playersService.create(playerData);
 
             // Assert
             const expectedResult: Player = {
+                name: playerData.name,
+                email: playerData.email,
                 avatarUri: playerData.avatarUri,
                 country: playerData.country,
                 isActive: true,
@@ -135,7 +149,7 @@ describe("PlayersService (Integration)", () => {
             const invalidPlayerData = { avatarUri: "" }; // Missing required fields
 
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            await expect(playersService.createPlayer(invalidPlayerData as any)).rejects.toThrow();
+            await expect(playersService.create(invalidPlayerData as any)).rejects.toThrow();
         });
     });
 
@@ -143,19 +157,20 @@ describe("PlayersService (Integration)", () => {
         it("update_WithValidData_ShouldReturnUpdatedPlayer", async () => {
             // Arrange
             const playerData: CreatePlayer = {
+                name: uuidv4(),
+                email: `${uuidv4()}@gmail.com`,
                 avatarUri: `http://example.com/${uuidv4()}.png`,
-                country: "Germany"
+                country: "GR"
             };
-            const createdPlayer = await playersService.createPlayer(playerData);
+            const createdPlayer = await playersService.create(playerData);
 
             const updatePlayerData: UpdatePlayer = {
                 avatarUri: `http://example.com/${uuidv4()}.png`,
-                country: "FR",
-                isBanned: true
+                country: "FR"
             }
 
             // Act
-            const updatedPlayer = await playersService.updatePlayer(createdPlayer.id, updatePlayerData);
+            const updatedPlayer = await playersService.update(createdPlayer.id, updatePlayerData);
 
             // Assert
             expect(updatedPlayer).toMatchObject(updatePlayerData);
@@ -163,43 +178,47 @@ describe("PlayersService (Integration)", () => {
 
         it("update_WithNonExistingPlayer_ShouldThrowError", async () => {
             // Arrange
-            const updatedData: UpdatePlayer = { avatarUri: "http://example.com/updated-avatar.png", country: "Spain", isBanned: true };
+            const updatedData: UpdatePlayer = { avatarUri: "http://example.com/updated-avatar.png", country: "Spain" };
 
             // Act & Assert
-            await expect(playersService.updatePlayer("nonexistent-id", updatedData)).rejects.toThrow("Player with id nonexistent-id not found");
+            await expect(playersService.update("nonexistent-id", updatedData)).rejects.toThrow("Player with id nonexistent-id not found");
         });
     });
 
     describe("delete", () => {
         it("delete_WithValidId_ShouldThrowError", async () => {
             // Arrange
-            const createdPlayer = await playersService.createPlayer({
+            const createdPlayer = await playersService.create({
+                name: uuidv4(),
+                email: `${uuidv4()}@gmail.com`,
                 avatarUri: "http://example.com/avatar5.png",
-                country: "Netherlands"
+                country: "NE"
             });
 
             // Act
-            await playersService.deletePlayer(createdPlayer.id);
+            await playersService.delete(createdPlayer.id);
 
             // Assert
             await expect(playersService.findOne(createdPlayer.id)).rejects.toThrow(`Player with id ${createdPlayer.id} not found`);
         });
 
         it("delete_WithInvalidId_ShouldThrowError", async () => {
-            await expect(playersService.deletePlayer("invalid-id")).rejects.toThrow("Player with id invalid-id not found");
+            await expect(playersService.delete("invalid-id")).rejects.toThrow("Player with id invalid-id not found");
         });
     });
 
     describe("deactivate", () => {
         it("deactivate_WithValidId_ShouldReturnDeactivatedPlayer", async () => {
             // Arrange
-            const createdPlayer = await playersService.createPlayer({
+            const createdPlayer = await playersService.create({
+                name: uuidv4(),
+                email: `${uuidv4()}@gmail.com`,
                 avatarUri: "http://example.com/avatar6.png",
-                country: "Brazil"
+                country: "BR"
             });
 
             // Act
-            const deactivatedPlayer = await playersService.deactivatePlayer(createdPlayer.id);
+            const deactivatedPlayer = await playersService.deactivate(createdPlayer.id);
 
             // Assert
             expect(deactivatedPlayer.isActive).toBe(false);
@@ -207,20 +226,22 @@ describe("PlayersService (Integration)", () => {
 
         it("deactivate_WithAlreadyInactivePlayer_ShouldNotThrowError", async () => {
             // Arrange
-            const createdPlayer = await playersService.createPlayer({
+            const createdPlayer = await playersService.create({
+                name: uuidv4(),
+                email: `${uuidv4()}@gmail.com`,
                 avatarUri: "http://example.com/avatar7.png",
-                country: "Argentina"
+                country: "AR"
             });
 
             // First deactivate the player
-            await playersService.deactivatePlayer(createdPlayer.id);
+            await playersService.deactivate(createdPlayer.id);
 
             // Act & Assert: Trying to deactivate again should throw an error
-            expect(async () => { await playersService.deactivatePlayer(createdPlayer.id) }).not.toThrow();
+            expect(async () => { await playersService.deactivate(createdPlayer.id) }).not.toThrow();
         });
 
         it("deactivate_WithInvalidId_ShouldThrowError", async () => {
-            await expect(playersService.deactivatePlayer("invalid-id")).rejects.toThrow("Player with id invalid-id not found");
+            await expect(playersService.deactivate("invalid-id")).rejects.toThrow("Player with id invalid-id not found");
         });
     });
 });

@@ -9,6 +9,8 @@ export class DbPlayerMapper {
     if (isNullOrUndefinedOrEmpty(playerDocument)) throw new Error("playerDocument is required")
     return plainToInstance(Player, {
       id: playerDocument.playerId,
+      name: playerDocument.name,
+      email: playerDocument.email,
       avatarUri: playerDocument.avatarUri,
       country: playerDocument.country,
       isBanned: playerDocument.isBanned,

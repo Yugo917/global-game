@@ -6,6 +6,7 @@ import { Model } from "mongoose";
 import { NotFoundException } from "@nestjs/common";
 import { PlayersService } from "src/players/service/player.service";
 import { IPlayerDocument, PlayerDocument, Playerv1CollectionName } from "src/players/service/player.schema";
+import { v4 as uuidv4 } from "uuid";
 
 describe("PlayersService (Unit)", () => {
   let service: PlayersService;
@@ -40,7 +41,7 @@ describe("PlayersService (Unit)", () => {
   test("findAll_ShouldReturnListOfPlayers", async () => {
     // Arrange
     const playerDocuments: IPlayerDocument[] = [
-      { playerId: "123", avatarUri: "http://example.com/avatar.png", country: "US", isBanned: false, isActive: true, updateDate: new Date(), creationDate: new Date() }
+      { playerId: "123", name: uuidv4(), email: `${uuidv4()}@gmail.com`, avatarUri: "http://example.com/avatar.png", country: "US", isBanned: false, isActive: true, updateDate: new Date(), creationDate: new Date() }
     ];
     jest.spyOn(model, "find").mockReturnValue({
       lean: jest.fn().mockReturnThis(),
@@ -58,7 +59,7 @@ describe("PlayersService (Unit)", () => {
   test("findOne_WithExistingId_ShouldReturnPlayer", async () => {
     // Arrange
     const playerId = "123";
-    const playerDocument: IPlayerDocument = { playerId, avatarUri: "http://example.com/avatar.png", country: "US", isBanned: false, isActive: true, updateDate: new Date(), creationDate: new Date() };
+    const playerDocument: IPlayerDocument = { playerId, name: uuidv4(), email: `${uuidv4()}@gmail.com`, avatarUri: "http://example.com/avatar.png", country: "US", isBanned: false, isActive: true, updateDate: new Date(), creationDate: new Date() };
     jest.spyOn(model, "findOne").mockReturnValue({
       lean: jest.fn().mockReturnThis(),
       exec: jest.fn().mockResolvedValue(playerDocument)
@@ -85,7 +86,7 @@ describe("PlayersService (Unit)", () => {
 
   test("createPlayer_WithValidData_ShouldReturnNewPlayer", async () => {
     // Arrange
-    const playerData: IPlayerDocument = { playerId: "123", avatarUri: "http://example.com/avatar.png", country: "US", isBanned: false, isActive: true, updateDate: new Date(), creationDate: new Date() };
+    const playerData: IPlayerDocument = { playerId: "123", name: uuidv4(), email: `${uuidv4()}@gmail.com`, avatarUri: "http://example.com/avatar.png", country: "US", isBanned: false, isActive: true, updateDate: new Date(), creationDate: new Date() };
     jest.spyOn(model, "insertMany").mockResolvedValue(playerData as any);
     jest.spyOn(model, "findOne").mockReturnValue({
       lean: jest.fn().mockReturnThis(),
@@ -93,7 +94,7 @@ describe("PlayersService (Unit)", () => {
     } as any);
 
     // Act
-    const result = await service.createPlayer(playerData as any);
+    const result = await service.create(playerData as any);
 
     // Assert
     expect(result.id).toBe(playerData.playerId);
@@ -108,7 +109,7 @@ describe("PlayersService (Unit)", () => {
     } as any);
 
     // Act & Assert
-    await expect(service.deletePlayer(playerId)).resolves.toBeUndefined();
+    await expect(service.delete(playerId)).resolves.toBeUndefined();
   });
 
   test("deletePlayer_WithNonExistingId_ShouldThrowNotFoundException", async () => {
@@ -120,6 +121,6 @@ describe("PlayersService (Unit)", () => {
     } as any);
 
     // Act & Assert
-    await expect(service.deletePlayer(playerId)).rejects.toThrow(NotFoundException);
+    await expect(service.delete(playerId)).rejects.toThrow(NotFoundException);
   });
 });

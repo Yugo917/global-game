@@ -2,13 +2,14 @@ import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from "@nes
 import { Observable, tap } from "rxjs";
 import { Inject } from "@nestjs/common";
 import { LoggerService } from "@nestjs/common";
+import { stringify } from "circular-json";
 
-class HpptMessageMetadata {
-    public httpMethod: string;
-    public httpUrl: string;
-    public httpResponseStatusCode: string;
-    public httpElapsed: string;
-    public HttpErrorMessage: string | undefined;
+interface IHpptMessageMetadata {
+    httpMethod: string;
+    httpUrl: string;
+    httpResponseStatusCode: string;
+    httpElapsed: string;
+    HttpErrorMessage: string | undefined;
 }
 
 @Injectable()
@@ -36,14 +37,15 @@ export class LoggerInterceptor implements NestInterceptor {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    private getHttpMetaData(context: ExecutionContext, interceptDate: number, error?: any): HpptMessageMetadata {
+    private getHttpMetaData(context: ExecutionContext, interceptDate: number, error?: any): IHpptMessageMetadata {
         const ctx = context.switchToHttp();
         const request = ctx.getRequest();
         const response = ctx.getResponse();
         const { statusCode } = response;
 
         const responseStatusCode = error ? error.status : statusCode;
-        const errorMessage = error ? "(error : " + error?.message + ")" : undefined
+        const errorAsJson = stringify(error);
+        const errorMessage = error ? "(error : " + error?.message + ") " + errorAsJson : undefined
 
         const elapsed = (Date.now() - interceptDate).toFixed(4);
 
