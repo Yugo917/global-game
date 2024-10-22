@@ -1,68 +1,66 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsBoolean, IsDate, IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 
-export class PlayerApiDtoV1 {
+export class PlayerApiV1 {
   @ApiProperty({ description: "Unique identifier of the player" })
-  @IsNotEmpty()
-  @IsString()
-  public id: string;
+  public id: string = "";
+
+  @ApiProperty({ description: "Name of the player" })
+  public name: string = "";
+
+  @ApiProperty({ description: "Email of the player" })
+  public email: string = "";
 
   @ApiProperty({ description: "URI of the player avatar" })
-  @IsNotEmpty()
-  @IsString()
-  public avatarUri: string;
+  public avatarUri: string = "";
 
   @ApiProperty({ description: "Country of the player" })
-  @IsNotEmpty()
-  @IsString()
-  public country: string;
+  public country: string = "";
 
   @ApiProperty({ description: "Flag indicating if the player is banned" })
-  @IsNotEmpty()
-  @IsBoolean()
-  public isBanned: boolean;
+  public isBanned: boolean = false;
 
   @ApiProperty({ description: "Active status of the player" })
-  @IsNotEmpty()
-  @IsBoolean()
-  public isActive: boolean;
+  public isActive: boolean = false;
 
   @ApiProperty({ description: "Last update date of the player record" })
-  @IsNotEmpty()
-  @IsDate()
-  public updateDate: Date;
+  public updateDate: Date = new Date();
 
   @ApiProperty({ description: "Creation date of the player record" })
-  @IsNotEmpty()
-  @IsDate()
-  public creationDate: Date;
+  public creationDate: Date = new Date();
 }
 
+
 export class PlayerCreateApiV1 {
+  @ApiProperty({ description: "Name of the player" })
+  @IsNotEmpty()
+  @IsString()
+  public name: string = "";
+
+  @ApiProperty({ description: "Email of the player" })
+  @IsNotEmpty()
+  @IsString()
+  public email: string = "";
+
   @ApiProperty({ description: "URI of the player avatar" })
   @IsNotEmpty()
   @IsString()
-  public avatarUri: string;
+  public avatarUri: string = "";
 
   @ApiProperty({ description: "Country of the player" })
   @IsNotEmpty()
   @IsString()
-  public country: string;
+  public country: string = "";
 }
 
 export class PlayerUpdateApiV1 {
   @ApiProperty({ description: "URI of the player avatar" })
   @IsNotEmpty()
   @IsString()
-  public avatarUri: string;
+  public avatarUri: string = "";
 
   @ApiProperty({ description: "Country of the player" })
   @IsNotEmpty()
   @IsString()
-  public country: string;
-
-  @ApiProperty({ description: "Flag indicating if the player is banned" })
-  @IsNotEmpty()
-  @IsBoolean()
-  public isBanned: boolean;
+  public country: string = "";
 }

@@ -1,6 +1,8 @@
 {
     "files.exclude": {
         "node_modules/": true,
+        "dist/": true,
+        "test/coverage/": true,
     },
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {

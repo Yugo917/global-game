@@ -3,12 +3,14 @@ import { Player } from "src/players/service/player.models";
 import { IPlayerDocument } from "src/players/service/player.schema";
 import { DbPlayerMapper } from "src/players/service/players.db.model.mapper";
 
-describe("DbPlayerMapper", () => {
+describe("DbPlayerMapper (Unit)", () => {
 
     test("mapToEntity_WithValidPlayerDocument_ShouldSucceed", () => {
         // Arrange
         const playerDocument: IPlayerDocument = {
             playerId: "123",
+            name: "toto",
+            email: "toto@gmail.com",
             avatarUri: "http://example.com/avatar.png",
             country: "US",
             isBanned: false,

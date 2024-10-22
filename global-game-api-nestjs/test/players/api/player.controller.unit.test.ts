@@ -1,30 +1,33 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { ApiPlayerMapper } from "src/players/api/players.api.model.mapper";
+import { MapperModule } from "src/common/mapper/mapper.module";
+import { PlayerApiMapperProfile } from "src/players/api/players.api.mapper.profile";
 import { PlayersController } from "src/players/api/players.controller";
 import { PlayerCreateApiV1, PlayerUpdateApiV1 } from "src/players/api/players.models.dto";
 import { Player } from "src/players/service/player.models";
 import { PlayersService } from "src/players/service/player.service";
 
-describe("PlayersController", () => {
+describe("PlayersController (Unit)", () => {
     let controller: PlayersController;
     let service: PlayersService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             controllers: [PlayersController],
+            imports: [MapperModule],
             providers: [
-                PlayersService,
-                ApiPlayerMapper
+                PlayerApiMapperProfile,
+                PlayersService
             ]
         })
             .overrideProvider(PlayersService)
             .useValue({
                 findAll: jest.fn(),
                 findOne: jest.fn(),
-                createPlayer: jest.fn(),
-                updatePlayer: jest.fn(),
-                deletePlayer: jest.fn(),
-                deactivatePlayer: jest.fn()
+                create: jest.fn(),
+                update: jest.fn(),
+                delete: jest.fn(),
+                deactivate: jest.fn(),
+                ban: jest.fn()
             })
             .compile();
 
@@ -41,6 +44,8 @@ describe("PlayersController", () => {
         const players: Player[] = [
             {
                 id: "1",
+                name: "John Doe",
+                email: "john.doe@example.com",
                 avatarUri: "http://example.com/avatar.png",
                 country: "US",
                 isBanned: false,
@@ -64,6 +69,8 @@ describe("PlayersController", () => {
         const playerId = "1";
         const player: Player = {
             id: playerId,
+            name: "John Doe",
+            email: "john.doe@example.com",
             avatarUri: "http://example.com/avatar.png",
             country: "US",
             isBanned: false,
@@ -83,20 +90,23 @@ describe("PlayersController", () => {
     test("createPlayer_ShouldReturnNewPlayer", async () => {
         // Arrange
         const playerCreateDto: PlayerCreateApiV1 = {
+            name: "John Doe",
+            email: "john.doe@example.com",
             avatarUri: "http://example.com/avatar.png",
             country: "US"
-
         };
         const createdPlayer: Player = {
+            id: "123",
+            name: playerCreateDto.name,
+            email: playerCreateDto.email,
             avatarUri: playerCreateDto.avatarUri,
             country: playerCreateDto.country,
-            id: "123",
             isBanned: false,
             isActive: true,
             updateDate: new Date(),
             creationDate: new Date()
         };
-        jest.spyOn(service, "createPlayer").mockResolvedValue(createdPlayer);
+        jest.spyOn(service, "create").mockResolvedValue(createdPlayer);
 
         // Act
         const result = await controller.create(playerCreateDto);
@@ -110,19 +120,20 @@ describe("PlayersController", () => {
         const playerId = "123";
         const updateDto: PlayerUpdateApiV1 = {
             avatarUri: "http://example.com/new-avatar.png",
-            country: "CA",
-            isBanned: false
+            country: "CA"
         };
         const updatedPlayer: Player = {
             id: playerId,
+            name: "John Doe",
+            email: "john.doe@example.com",
             avatarUri: updateDto.avatarUri,
             country: updateDto.country,
-            isBanned: updateDto.isBanned,
+            isBanned: false,
             isActive: true,
             updateDate: new Date(),
             creationDate: new Date()
         };
-        jest.spyOn(service, "updatePlayer").mockResolvedValue(updatedPlayer);
+        jest.spyOn(service, "update").mockResolvedValue(updatedPlayer);
 
         // Act
         const result = await controller.update(playerId, updateDto);
@@ -135,7 +146,7 @@ describe("PlayersController", () => {
     test("deletePlayer_ShouldSucceed", async () => {
         // Arrange
         const playerId = "123";
-        jest.spyOn(service, "deletePlayer").mockResolvedValue();
+        jest.spyOn(service, "delete").mockResolvedValue();
 
         // Act & Assert
         await expect(controller.delete(playerId)).resolves.toBeUndefined();
@@ -146,6 +157,8 @@ describe("PlayersController", () => {
         const playerId = "123";
         const updatedPlayer: Player = {
             id: playerId,
+            name: "John Doe",
+            email: "john.doe@example.com",
             avatarUri: "http://example.com/avatar.png",
             country: "US",
             isBanned: false,
@@ -153,7 +166,7 @@ describe("PlayersController", () => {
             updateDate: new Date(),
             creationDate: new Date()
         };
-        jest.spyOn(service, "deactivatePlayer").mockResolvedValue(updatedPlayer);
+        jest.spyOn(service, "deactivate").mockResolvedValue(updatedPlayer);
 
         // Act
         const result = await controller.deactivate(playerId);

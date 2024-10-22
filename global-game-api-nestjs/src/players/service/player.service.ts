@@ -6,18 +6,8 @@ import { CreatePlayer, Player, UpdatePlayer } from "./player.models";
 import { v4 as uuidv4 } from "uuid";
 import { DbPlayerMapper } from "./players.db.model.mapper";
 
-
-export interface IPlayerService {
-  findAll(): Promise<Player[]>;
-  findOne(id: string): Promise<Player>;
-  createPlayer(playerData: Omit<Player, "id">): Promise<Player>;
-  updatePlayer(id: string, updatedData: Omit<Player, "id">): Promise<Player>;
-  deletePlayer(id: string): Promise<void>;
-  deactivatePlayer(id: string): Promise<Player>;
-}
-
 @Injectable()
-export class PlayersService implements IPlayerService {
+export class PlayersService {
   public constructor(
     @InjectModel(Playerv1CollectionName) private readonly playerModel: Model<PlayerDocument>,
   ) { }
@@ -35,8 +25,10 @@ export class PlayersService implements IPlayerService {
     return DbPlayerMapper.mapToEntity(player);
   }
 
-  public async createPlayer(createPlayer: CreatePlayer): Promise<Player> {
+  public async create(createPlayer: CreatePlayer): Promise<Player> {
     const newPlayer: IPlayerDocument = {
+      name: createPlayer.name,
+      email: createPlayer.email,
       avatarUri: createPlayer.avatarUri,
       country: createPlayer.country,
       playerId: uuidv4(),
@@ -49,13 +41,12 @@ export class PlayersService implements IPlayerService {
     return await this.findOne(newPlayer.playerId);
   }
 
-  public async updatePlayer(id: string, updatedData: UpdatePlayer): Promise<Player> {
+  public async update(id: string, updatedData: UpdatePlayer): Promise<Player> {
     const player = await this.playerModel.findOneAndUpdate(
       { playerId: id },
       {
         avatarUri: updatedData.avatarUri,
         country: updatedData.country,
-        isBanned: updatedData.isBanned,
         updateDate: new Date()
       },
       { new: true },
@@ -67,18 +58,34 @@ export class PlayersService implements IPlayerService {
     return DbPlayerMapper.mapToEntity(player);
   }
 
-  public async deletePlayer(id: string): Promise<void> {
+  public async delete(id: string): Promise<void> {
     const result = await this.playerModel.deleteOne({ playerId: id }).exec();
     if (result.deletedCount == 0) {
       throw new NotFoundException(`Player with id ${id} not found`);
     }
   }
 
-  public async deactivatePlayer(id: string): Promise<Player> {
+  public async deactivate(id: string): Promise<Player> {
     const player = await this.playerModel.findOneAndUpdate(
       { playerId: id },
       {
         isActive: false,
+        updateDate: new Date()
+      },
+      { new: true },
+    ).exec();
+
+    if (!player) {
+      throw new NotFoundException(`Player with id ${id} not found`);
+    }
+    return DbPlayerMapper.mapToEntity(player);
+  }
+
+  public async ban(id: string): Promise<Player> {
+    const player = await this.playerModel.findOneAndUpdate(
+      { playerId: id },
+      {
+        banned: true,
         updateDate: new Date()
       },
       { new: true },

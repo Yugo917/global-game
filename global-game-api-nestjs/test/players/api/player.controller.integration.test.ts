@@ -33,8 +33,8 @@ describe("PlayersController (Integration)", () => {
     });
 
     // Utility function to create a player
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    const createPlayer = async (playerData: PlayerCreateApiV1) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const createPlayer = async (playerData: PlayerCreateApiV1): Promise<any> => {
         return await request(app.getHttpServer())
             .post("/players")
             .send(playerData)
@@ -43,8 +43,13 @@ describe("PlayersController (Integration)", () => {
 
     describe("findAll", () => {
         it("findAll_WithExistingPlayers_ShouldSucceed", async () => {
-            // Arrange: Create sample player
-            await createPlayer({ avatarUri: "http://example.com/avatar1.png", country: "USA" });
+            // Arrange: Create sample player with all required properties
+            await createPlayer({
+                name: "John Doe",
+                email: "john.doe@example.com",
+                avatarUri: "http://example.com/avatar1.png",
+                country: "US"
+            });
 
             // Act 
             const response = await request(app.getHttpServer()).get("/players").expect(200);
@@ -66,7 +71,12 @@ describe("PlayersController (Integration)", () => {
     describe("findOne", () => {
         it("findOne_WithValidId_ShouldReturnPlayer", async () => {
             // Arrange
-            const { body: createdPlayer } = await createPlayer({ avatarUri: "http://example.com/avatar2.png", country: "Canada" });
+            const { body: createdPlayer } = await createPlayer({
+                name: "John Doe",
+                email: "john.doe@example.com",
+                avatarUri: "http://example.com/avatar2.png",
+                country: "CN"
+            });
 
             // Act & Assert
             const response = await request(app.getHttpServer())
@@ -83,19 +93,24 @@ describe("PlayersController (Integration)", () => {
 
     describe("create", () => {
         it("create_WithValidData_ShouldReturnCreatedPlayer", async () => {
-            const playerData = { avatarUri: "http://example.com/avatar3.png", country: "France" };
+            const playerData = {
+                name: "John Doe",
+                email: "john.doe@example.com",
+                avatarUri: "http://example.com/avatar3.png",
+                country: "FR"
+            };
             const response = await createPlayer(playerData);
             expect(response.body).toHaveProperty("id");
             expect(response.body.avatarUri).toBe(playerData.avatarUri);
         });
 
         it("create_WithMissingData_ShouldThrowError", async () => {
-            const invalidPlayerData = { avatarUri: "" };
+            const invalidPlayerData = { avatarUri: "" }; // Missing required data
             await request(app.getHttpServer()).post("/players").send(invalidPlayerData).expect(400);
         });
 
         it("create_WithNotConformData_ShouldThrowError", async () => {
-            const invalidPlayerData = { avatarUri: 456, country: 123 };
+            const invalidPlayerData = { avatarUri: 456, country: 123 }; // Invalid data types
             await request(app.getHttpServer()).post("/players").send(invalidPlayerData).expect(400);
         });
     });
@@ -103,8 +118,16 @@ describe("PlayersController (Integration)", () => {
     describe("update", () => {
         it("update_WithValidData_ShouldReturnUpdatedPlayer", async () => {
             // Arrange
-            const { body: createdPlayer } = await createPlayer({ avatarUri: "http://example.com/avatar4.png", country: "Germany" });
-            const updatedData = { avatarUri: "http://example.com/updated-avatar.png", country: "Spain", isBanned: true };
+            const { body: createdPlayer } = await createPlayer({
+                name: "John Doe",
+                email: "john.doe@example.com",
+                avatarUri: "http://example.com/avatar4.png",
+                country: "GR"
+            });
+            const updatedData = {
+                avatarUri: "http://example.com/updated-avatar.png",
+                country: "SP"
+            };
 
             // Act & Assert
             const response = await request(app.getHttpServer())
@@ -114,17 +137,24 @@ describe("PlayersController (Integration)", () => {
 
             expect(response.body.avatarUri).toBe(updatedData.avatarUri);
             expect(response.body.country).toBe(updatedData.country);
-            expect(response.body.country).toBe(updatedData.country);
         });
 
         it("update_WithNonExistingPlayer_ShouldThrowError", async () => {
-            const updatedData = { avatarUri: "http://example.com/updated-avatar.png", country: "Spain", isBanned: true };
+            const updatedData = {
+                avatarUri: "http://example.com/updated-avatar.png",
+                country: "SP"
+            };
             await request(app.getHttpServer()).put("/players/nonexistent-id").send(updatedData).expect(404);
         });
 
         it("update_WithMissingData_ShouldThrowError", async () => {
             // Arrange
-            const { body: createdPlayer } = await createPlayer({ avatarUri: "http://example.com/avatar5.png", country: "Italy" });
+            const { body: createdPlayer } = await createPlayer({
+                name: "John Doe",
+                email: "john.doe@example.com",
+                avatarUri: "http://example.com/avatar5.png",
+                country: "IT"
+            });
             const invalidData = { avatarUri: "" }; // Missing required data
 
             // Act & Assert
@@ -136,8 +166,13 @@ describe("PlayersController (Integration)", () => {
 
         it("update_WithNotConformData_ShouldThrowError", async () => {
             // Arrange
-            const { body: createdPlayer } = await createPlayer({ avatarUri: "http://example.com/avatar6.png", country: "Portugal" });
-            const invalidData = { avatarUri: "invalid-uri", country: 123 }; // Malformed data
+            const { body: createdPlayer } = await createPlayer({
+                name: "John Doe",
+                email: "john.doe@example.com",
+                avatarUri: "http://example.com/avatar6.png",
+                country: "PT"
+            });
+            const invalidData = { avatarUri: "invalid-uri", country: 123 }; // Invalid data
 
             // Act & Assert
             await request(app.getHttpServer())
@@ -150,7 +185,12 @@ describe("PlayersController (Integration)", () => {
     describe("delete", () => {
         it("delete_WithValidId_ShouldSucceed", async () => {
             // Arrange
-            const { body: createdPlayer } = await createPlayer({ avatarUri: "http://example.com/avatar7.png", country: "Netherlands" });
+            const { body: createdPlayer } = await createPlayer({
+                name: "John Doe",
+                email: "john.doe@example.com",
+                avatarUri: "http://example.com/avatar7.png",
+                country: "NT"
+            });
 
             // Act & Assert
             await request(app.getHttpServer()).delete(`/players/${createdPlayer.id}`).expect(200);
@@ -167,11 +207,16 @@ describe("PlayersController (Integration)", () => {
     describe("deactivate", () => {
         it("deactivate_WithValidId_ShouldReturnDeactivatedPlayer", async () => {
             // Arrange
-            const { body: createdPlayer } = await createPlayer({ avatarUri: "http://example.com/avatar8.png", country: "Brazil" });
+            const { body: createdPlayer } = await createPlayer({
+                name: "John Doe",
+                email: "john.doe@example.com",
+                avatarUri: "http://example.com/avatar8.png",
+                country: "BR"
+            });
 
             // Act & Assert
             const response = await request(app.getHttpServer())
-                .patch(`/players/${createdPlayer.id}`)
+                .patch(`/players/deactive/${createdPlayer.id}`)
                 .expect(200);
 
             expect(response.body.isActive).toBe(false);
@@ -179,14 +224,18 @@ describe("PlayersController (Integration)", () => {
 
         it("deactivate_WithAlreadyInactivePlayer_ShouldNotThrowError", async () => {
             // Arrange
-            const { body: createdPlayer } = await createPlayer({ avatarUri: "http://example.com/avatar9.png", country: "Argentina" });
+            const { body: createdPlayer } = await createPlayer({
+                name: "John Doe",
+                email: "john.doe@example.com",
+                avatarUri: "http://example.com/avatar9.png",
+                country: "AR"
+            });
 
-            //ACT 
             // First deactivate
-            await request(app.getHttpServer()).patch(`/players/${createdPlayer.id}`).expect(200);
+            await request(app.getHttpServer()).patch(`/players/deactive/${createdPlayer.id}`).expect(200);
 
             // Attempt to deactivate again
-            await request(app.getHttpServer()).patch(`/players/${createdPlayer.id}`).expect(200);
+            await request(app.getHttpServer()).patch(`/players/deactive/${createdPlayer.id}`).expect(200);
         });
 
         it("deactivate_WithInvalidId_ShouldThrowError", async () => {
