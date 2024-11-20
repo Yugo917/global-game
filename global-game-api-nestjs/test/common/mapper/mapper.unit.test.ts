@@ -81,7 +81,7 @@ describe("Mapper", () => {
         }
 
         const mapper = new Mapper({ strict: false, undefinedIsAValue: true });
-        const options: IMappingOptions = {
+        const options: IMappingOptions<SourceClass> = {
             ignorePattern: /^_/ // Ignore private properties that start with an underscore
         };
         mapper.addProfile(SourceClass, TargetClass, options);
@@ -160,7 +160,7 @@ describe("Mapper", () => {
         }
 
         const mapper = new Mapper({ strict: false, undefinedIsAValue: true });
-        const options: IMappingOptions = {};
+        const options: IMappingOptions<SourceClass> = {};
         mapper.addProfile(SourceClass, TargetClass, options);
         const source = new InvalidSource();
 
@@ -364,13 +364,13 @@ describe("Mapper", () => {
 
         const mapper = new Mapper({ strict: false, undefinedIsAValue: true });
 
-        const profile1: IMappingOptions = {
+        const profile1: IMappingOptions<SourceClass> = {
             transforms: {
                 prop2: (value: number) => value * 10 // Multiply by 10
             }
         };
 
-        const profile2: IMappingOptions = {
+        const profile2: IMappingOptions<SourceClass> = {
             transforms: {
                 prop1: (value: string) => value + " transformed" // Append 'transformed'
             }
@@ -452,7 +452,7 @@ describe("Mapper", () => {
         }
 
         const mapper = new Mapper({ strict: false, undefinedIsAValue: true });
-        const options: IMappingOptions = {
+        const options: IMappingOptions<SourceWithTransformAndIgnore> = {
             ignore: ["prop3"], // Ignore prop3
             transforms: {
                 prop2: (value: number) => value * 2 // Multiply prop2 by 2
@@ -489,4 +489,163 @@ describe("Mapper", () => {
             mapper.map(source, SourceWithoutDefaults, TargetWithoutDefaults);
         }).toThrow("the target class have no properties or the props not have defaut value for the runtime initialization");
     });
+
+    test("map_WithIgnoreAndRegex_ShouldIgnorePropertiesCorrectly", () => {
+        // Arrange
+        class SourceClass {
+            public prop1 = "value1";
+            public prop2 = "value2";
+            public _ignoredProp = "ignoreMe";
+        }
+
+        class TargetClass {
+            public prop1: string = "";
+            public prop2: string = "";
+            public _ignoredProp: string = "";
+        }
+
+        const mapper = new Mapper({ strict: false, undefinedIsAValue: true });
+        const options: IMappingOptions<SourceClass> = {
+            ignore: ["_ignoredProp"], // Explicitly ignore _ignoredProp
+            ignorePattern: /^_/ // Ignore properties starting with an underscore
+        };
+
+        mapper.addProfile(SourceClass, TargetClass, options);
+        const source = new SourceClass();
+
+        // Act
+        const result = mapper.map(source, SourceClass, TargetClass);
+
+        // Assert
+        expect(result.prop1).toBe("value1");
+        expect(result.prop2).toBe("value2");
+        expect(result._ignoredProp).toBe("");
+    });
+
+    test("map_WithNoProfile_ShouldThrowError", () => {
+        // Arrange
+        class SourceClass {
+            public prop1 = "value1";
+        }
+
+        class TargetClass {
+            public prop1: string = "";
+        }
+
+        const mapper = new Mapper({ strict: false, undefinedIsAValue: true });
+        const source = new SourceClass();
+
+        // Act & Assert
+        expect(() => {
+            mapper.map(source, SourceClass, TargetClass);
+        }).toThrow("Missing profile for this mapping  SourceClass->TargetClass");
+    });
+
+    test("map_WithNullInStrictMode_ShouldSucceed", () => {
+        // Arrange
+        class SourceWithNull {
+            public prop1: string | null = null;
+        }
+
+        class TargetWithNull {
+            public prop1: string | null = "";
+        }
+
+        const mapper = new Mapper({ strict: true, undefinedIsAValue: true });
+        mapper.addProfile(SourceWithNull, TargetWithNull);
+        const source = new SourceWithNull();
+
+        // Act
+        const result = mapper.map(source, SourceWithNull, TargetWithNull);
+
+        // Assert
+        expect(result.prop1).toBeNull();
+    });
+
+    test("map_WithMultipleTransformations_ShouldApplyAll", () => {
+        // Arrange
+        class SourceTransform {
+            public prop1 = 2;
+            public prop2 = 3;
+        }
+
+        class TargetTransform {
+            public prop1: number = 0;
+            public prop2: number = 0;
+        }
+
+        const mapper = new Mapper({ strict: false, undefinedIsAValue: true });
+        const options: IMappingOptions<SourceTransform> = {
+            transforms: {
+                prop1: (value: number) => value * 10, // Multiply prop1 by 10
+                prop2: (value: number) => value + 5  // Add 5 to prop2
+            }
+        };
+
+        mapper.addProfile(SourceTransform, TargetTransform, options);
+        const source = new SourceTransform();
+
+        // Act
+        const result = mapper.map(source, SourceTransform, TargetTransform);
+
+        // Assert
+        expect(result.prop1).toBe(20); // 2 * 10
+        expect(result.prop2).toBe(8);  // 3 + 5
+    });
+
+    test("map_WithUndefinedSourceProperty_ShouldIgnoreWhenUndefinedIsAValueFalse", () => {
+        // Arrange
+        class SourceUndefined {
+            public prop1: string | undefined = undefined;
+            public prop2 = "mappedValue";
+        }
+
+        class TargetUndefined {
+            public prop1: string | undefined = "";
+            public prop2: string = "";
+        }
+
+        const mapper = new Mapper({ strict: false, undefinedIsAValue: false });
+        mapper.addProfile(SourceUndefined, TargetUndefined);
+        const source = new SourceUndefined();
+
+        // Act
+        const result = mapper.map(source, SourceUndefined, TargetUndefined);
+
+        // Assert
+        expect(result.prop1).toBe(""); // Ignored because undefinedIsAValue is false
+        expect(result.prop2).toBe("mappedValue");
+    });
+
+    test("map_WithTransformUsingMultipleSourceProps_ShouldSucceed", () => {
+        // Arrange
+        class SourceMultiProps {
+            public firstName = "John";
+            public lastName = "Doe";
+            public age = 30;
+        }
+
+        class TargetMultiProps {
+            public fullName: string = "";
+            public age: number = 0;
+        }
+
+        const mapper = new Mapper({ strict: false, undefinedIsAValue: true });
+        const options: IMappingOptions<SourceMultiProps> = {
+            transforms: {
+                fullName: (value: any, source: SourceMultiProps) => `${source.firstName} ${source.lastName}` // Combine firstName and lastName
+            }
+        };
+
+        mapper.addProfile(SourceMultiProps, TargetMultiProps, options);
+        const source = new SourceMultiProps();
+
+        // Act
+        const result = mapper.map(source, SourceMultiProps, TargetMultiProps);
+
+        // Assert
+        expect(result.fullName).toBe("John Doe"); // fullName is derived from firstName and lastName
+        expect(result.age).toBe(30); // age is directly mapped
+    });
+
 });
