@@ -1,10 +1,10 @@
 import { arraysEqual } from "../assertion/assertion.helper";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export interface IMappingOptions {
+export interface IMappingOptions<TSource> {
     ignore?: string[]; // List of properties to ignore
     ignorePattern?: RegExp; // Pattern to ignore properties by regex
-    transforms?: { [key: string]: (value: any) => any }; // Transformations for properties
+    transforms?: { [key: string]: (value: any, sourceObject: TSource) => any }; // Transformations for properties
 }
 
 export interface IMapperOptions {
@@ -26,7 +26,7 @@ export abstract class MapperProfile {
  * because the targetClass constructor must initialize the object with default value properties to be reflectable (without metaData)
  */
 export class Mapper {
-    private profiles = new Map<string, IMappingOptions | undefined>();
+    private profiles = new Map<string, IMappingOptions<any> | undefined>();
     private mapperOption: IMapperOptions;
 
     /**
@@ -46,7 +46,7 @@ export class Mapper {
     public addProfile<TSource, TTarget>(
         sourceClass: new () => TSource,
         targetClass: new () => TTarget,
-        options?: IMappingOptions
+        options?: IMappingOptions<TSource>
     ): void {
         const key = this.getProfileKey(sourceClass, targetClass);
         this.profiles.set(key, options);
@@ -112,7 +112,7 @@ export class Mapper {
         (target as any)[key] = (source as any)[key];
     }
 
-    private mapWithOption(key: string, mappingOptions: IMappingOptions, source: any, target: any): void {
+    private mapWithOption(key: string, mappingOptions: IMappingOptions<object>, source: any, target: any): void {
         // Ignore properties explicitly listed or matching the regex pattern
         if (mappingOptions.ignore?.includes(key) || (mappingOptions.ignorePattern && mappingOptions.ignorePattern.test(key))) {
             return;
@@ -122,7 +122,7 @@ export class Mapper {
 
         // Manage transformations
         if (mappingOptions.transforms && mappingOptions.transforms[key]) {
-            (target as any)[key] = mappingOptions.transforms[key]((source as any)[key]);
+            (target as any)[key] = mappingOptions.transforms[key]((source as any)[key], source as any);
             return;
         }
 
