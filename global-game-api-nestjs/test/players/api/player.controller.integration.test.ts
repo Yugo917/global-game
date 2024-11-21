@@ -15,6 +15,8 @@ describe("PlayersController (Integration)", () => {
     let playersService: PlayersService;
 
     beforeAll(async () => {
+        process.env.LOG_LEVEL = "silent";
+
         const moduleFixture: TestingModule = await Test.createTestingModule({
             imports: [
                 PlayersModule,
