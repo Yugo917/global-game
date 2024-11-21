@@ -126,7 +126,8 @@ describe("PlayersController (Integration)", () => {
             });
             const updatedData = {
                 avatarUri: "http://example.com/updated-avatar.png",
-                country: "SP"
+                country: "SP",
+                thirdPartyIdentifiers: [{ id: "google_id", name: "google_name", email: "google_email@gmail.com", avatarUri: "google_avatarURI", gameServiceProvider: "Unknown" }]
             };
 
             // Act & Assert

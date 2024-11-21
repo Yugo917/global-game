@@ -4,7 +4,18 @@ db.createCollection('player-v1', {
   validator: {
     $jsonSchema: {
       bsonType: 'object',
-      required: ['playerId', 'name', 'email', 'avatarUri', 'country', 'isBanned', 'isActive', 'updateDate', 'creationDate'],
+      required: [
+        'playerId',
+        'name',
+        'email',
+        'thirdPartyIdentifiers',
+        'avatarUri',
+        'country',
+        'isBanned',
+        'isActive',
+        'updateDate',
+        'creationDate'
+      ],
       properties: {
         playerId: {
           bsonType: 'string',
@@ -28,6 +39,38 @@ db.createCollection('player-v1', {
           bsonType: 'string',
           description: 'Country must be a 2-letter ISO code and is required',
           pattern: '^[A-Z]{2}$',
+        },
+        thirdPartyIdentifiers: {
+          bsonType: 'array',
+          description: 'List of third-party identifiers associated with the player',
+          items: {
+            bsonType: 'object',
+            required: ['id', 'name', 'email', 'avatarUri', 'gameServiceProvider'],
+            properties: {
+              id: {
+                bsonType: 'string',
+                description: 'ID of the third-party identifier (required)',
+              },
+              name: {
+                bsonType: 'string',
+                description: 'Name of the third-party identifier (required)',
+              },
+              email: {
+                bsonType: 'string',
+                description: 'Email associated with the third-party identifier',
+                pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$',
+              },
+              avatarUri: {
+                bsonType: 'string',
+                description: 'Avatar URI of the third-party identifier',
+              },
+              gameServiceProvider: {
+                bsonType: 'string',
+                description: 'Game service provider (e.g., GoogleGames, GameCenter)',
+                enum: ['Unknown', 'GoogleGames', 'GameCenter'],
+              },
+            },
+          },
         },
         isBanned: {
           bsonType: 'bool',
@@ -57,6 +100,15 @@ db.getCollection('player-v1').insertMany([
     email: 'john.doe@example.com',
     avatarUri: 'https://example.com/avatar1.png',
     country: 'US',
+    thirdPartyIdentifiers: [
+      {
+        id: 'tpid-12345',
+        name: 'Google Account',
+        email: 'john.doe@gmail.com',
+        avatarUri: 'https://example.com/google-avatar.png',
+        gameServiceProvider: 'GoogleGames',
+      },
+    ],
     isBanned: false,
     isActive: true,
     updateDate: new Date(),
@@ -68,6 +120,15 @@ db.getCollection('player-v1').insertMany([
     email: 'jane.smith@example.com',
     avatarUri: 'https://example.com/avatar2.png',
     country: 'CA',
+    thirdPartyIdentifiers: [
+      {
+        id: 'tpid-67890',
+        name: 'Apple Game Center',
+        email: 'jane.smith@icloud.com',
+        avatarUri: 'https://example.com/apple-avatar.png',
+        gameServiceProvider: 'GameCenter',
+      },
+    ],
     isBanned: false,
     isActive: true,
     updateDate: new Date(),
@@ -85,3 +146,4 @@ db.createUser({
     }
   ]
 });
+

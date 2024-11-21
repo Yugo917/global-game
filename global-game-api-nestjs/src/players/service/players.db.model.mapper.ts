@@ -7,12 +7,22 @@ export class DbPlayerMapper {
 
   public static mapToEntity(playerDocument: IPlayerDocument): Player {
     if (isNullOrUndefinedOrEmpty(playerDocument)) throw new Error("playerDocument is required")
+
+    const thirdPartyIdentifiers = playerDocument.thirdPartyIdentifiers.map(identifier => ({
+      id: identifier.id,
+      name: identifier.name,
+      email: identifier.email,
+      avatarUri: identifier.avatarUri,
+      gameServiceProvider: identifier.gameServiceProvider
+    }));
+
     return plainToInstance(Player, {
       id: playerDocument.playerId,
       name: playerDocument.name,
       email: playerDocument.email,
       avatarUri: playerDocument.avatarUri,
       country: playerDocument.country,
+      thirdPartyIdentifiers: thirdPartyIdentifiers,
       isBanned: playerDocument.isBanned,
       isActive: playerDocument.isActive,
       updateDate: playerDocument.updateDate,

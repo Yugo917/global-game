@@ -31,6 +31,7 @@ export class PlayersService {
       email: createPlayer.email,
       avatarUri: createPlayer.avatarUri,
       country: createPlayer.country,
+      thirdPartyIdentifiers: [],
       playerId: uuidv4(),
       isActive: true,
       isBanned: false,
@@ -47,6 +48,7 @@ export class PlayersService {
       {
         avatarUri: updatedData.avatarUri,
         country: updatedData.country,
+        thirdPartyIdentifiers: updatedData.thirdPartyIdentifiers,
         updateDate: new Date()
       },
       { new: true },
