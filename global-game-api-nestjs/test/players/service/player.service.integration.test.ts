@@ -44,6 +44,7 @@ describe("PlayersService (Integration)", () => {
                 email: player1Data.email,
                 avatarUri: player1Data.avatarUri,
                 country: player1Data.country,
+                thirdPartyIdentifiers: [],
                 isBanned: false,
                 isActive: true,
                 updateDate: createdPlayer1.updateDate,
@@ -62,6 +63,7 @@ describe("PlayersService (Integration)", () => {
                 email: player2Data.email,
                 avatarUri: player2Data.avatarUri,
                 country: player2Data.country,
+                thirdPartyIdentifiers: [],
                 isBanned: false,
                 isActive: true,
                 updateDate: createdPlayer2.updateDate,
@@ -134,6 +136,7 @@ describe("PlayersService (Integration)", () => {
                 email: playerData.email,
                 avatarUri: playerData.avatarUri,
                 country: playerData.country,
+                thirdPartyIdentifiers: [],
                 isActive: true,
                 isBanned: false,
                 creationDate: createdPlayer.creationDate,
@@ -166,7 +169,8 @@ describe("PlayersService (Integration)", () => {
 
             const updatePlayerData: UpdatePlayer = {
                 avatarUri: `http://example.com/${uuidv4()}.png`,
-                country: "FR"
+                country: "FR",
+                thirdPartyIdentifiers: [{ id: "google_id", name: "google_name", email: "google_email@gmail.com", avatarUri: "google_avatarURI", gameServiceProvider: "Unknown" }]
             }
 
             // Act
@@ -178,7 +182,7 @@ describe("PlayersService (Integration)", () => {
 
         it("update_WithNonExistingPlayer_ShouldThrowError", async () => {
             // Arrange
-            const updatedData: UpdatePlayer = { avatarUri: "http://example.com/updated-avatar.png", country: "Spain" };
+            const updatedData: UpdatePlayer = { avatarUri: "http://example.com/updated-avatar.png", country: "Spain", thirdPartyIdentifiers: [] };
 
             // Act & Assert
             await expect(playersService.update("nonexistent-id", updatedData)).rejects.toThrow("Player with id nonexistent-id not found");

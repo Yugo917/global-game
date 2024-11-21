@@ -48,6 +48,7 @@ describe("PlayersController (Unit)", () => {
                 email: "john.doe@example.com",
                 avatarUri: "http://example.com/avatar.png",
                 country: "US",
+                thirdPartyIdentifiers: [{ id: "google_id", name: "google_name", email: "google_email@gmail.com", avatarUri: "google_avatarURI", gameServiceProvider: "GoogleGames" }],
                 isBanned: false,
                 isActive: true,
                 updateDate: new Date(),
@@ -73,6 +74,7 @@ describe("PlayersController (Unit)", () => {
             email: "john.doe@example.com",
             avatarUri: "http://example.com/avatar.png",
             country: "US",
+            thirdPartyIdentifiers: [],
             isBanned: false,
             isActive: true,
             updateDate: new Date(),
@@ -101,6 +103,7 @@ describe("PlayersController (Unit)", () => {
             email: playerCreateDto.email,
             avatarUri: playerCreateDto.avatarUri,
             country: playerCreateDto.country,
+            thirdPartyIdentifiers: [],
             isBanned: false,
             isActive: true,
             updateDate: new Date(),
@@ -120,7 +123,8 @@ describe("PlayersController (Unit)", () => {
         const playerId = "123";
         const updateDto: PlayerUpdateApiV1 = {
             avatarUri: "http://example.com/new-avatar.png",
-            country: "CA"
+            country: "CA",
+            thirdPartyIdentifiers: [{ id: "google_id", name: "google_name", email: "google_email@gmail.com", avatarUri: "google_avatarURI", gameServiceProvider: "GoogleGames" }]
         };
         const updatedPlayer: Player = {
             id: playerId,
@@ -128,6 +132,7 @@ describe("PlayersController (Unit)", () => {
             email: "john.doe@example.com",
             avatarUri: updateDto.avatarUri,
             country: updateDto.country,
+            thirdPartyIdentifiers: [{ id: "google_id", name: "google_name", email: "google_email@gmail.com", avatarUri: "google_avatarURI", gameServiceProvider: "GoogleGames" }],
             isBanned: false,
             isActive: true,
             updateDate: new Date(),
@@ -141,6 +146,7 @@ describe("PlayersController (Unit)", () => {
         // Assert
         expect(result.id).toBe(playerId);
         expect(result.avatarUri).toBe(updateDto.avatarUri);
+        expect(result.thirdPartyIdentifiers).toEqual(updateDto.thirdPartyIdentifiers);
     });
 
     test("deletePlayer_ShouldSucceed", async () => {
@@ -161,6 +167,7 @@ describe("PlayersController (Unit)", () => {
             email: "john.doe@example.com",
             avatarUri: "http://example.com/avatar.png",
             country: "US",
+            thirdPartyIdentifiers: [],
             isBanned: false,
             isActive: false,
             updateDate: new Date(),

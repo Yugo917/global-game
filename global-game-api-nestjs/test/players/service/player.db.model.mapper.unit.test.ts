@@ -13,6 +13,7 @@ describe("DbPlayerMapper (Unit)", () => {
             email: "toto@gmail.com",
             avatarUri: "http://example.com/avatar.png",
             country: "US",
+            thirdPartyIdentifiers: [{ id: "google_id", name: "google_name", email: "google_email@gmail.com", avatarUri: "google_avatarURI", gameServiceProvider: "GoogleGames" }],
             isBanned: false,
             isActive: true,
             updateDate: new Date(),
@@ -26,6 +27,7 @@ describe("DbPlayerMapper (Unit)", () => {
         expect(result).toBeInstanceOf(Player);
         expect(result.id).toBe(playerDocument.playerId);
         expect(result.avatarUri).toBe(playerDocument.avatarUri);
+        expect(result.thirdPartyIdentifiers[0]).toEqual(playerDocument.thirdPartyIdentifiers[0]);
         expect(result.country).toBe(playerDocument.country);
         expect(result.isBanned).toBe(playerDocument.isBanned);
         expect(result.isActive).toBe(playerDocument.isActive);
