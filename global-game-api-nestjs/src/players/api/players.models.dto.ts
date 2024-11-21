@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsNotEmpty, IsString, ValidateNested } from "class-validator";
+import { IsArray, IsEmail, IsNotEmpty, IsString, Matches, ValidateNested } from "class-validator";
+
 
 export class ThirdPartyIdentifierApiV1 {
   @ApiProperty({ description: "Unique identifier for the third-party account" })
@@ -15,7 +16,7 @@ export class ThirdPartyIdentifierApiV1 {
 
   @ApiProperty({ description: "Email associated with the third-party account" })
   @IsNotEmpty()
-  @IsString()
+  @IsEmail()
   public email: string = "";
 
   @ApiProperty({ description: "Avatar URI for the third-party account" })
@@ -29,6 +30,9 @@ export class ThirdPartyIdentifierApiV1 {
   })
   @IsNotEmpty()
   @IsString()
+  @Matches(/^(Unknown|GoogleGames|GameCenter)$/, {
+    message: "gameServiceProvider must be one of the following values: Unknown, GoogleGames, GameCenter"
+  })
   public gameServiceProvider: "Unknown" | "GoogleGames" | "GameCenter" = "Unknown";
 }
 
@@ -75,7 +79,7 @@ export class PlayerCreateApiV1 {
 
   @ApiProperty({ description: "Email of the player" })
   @IsNotEmpty()
-  @IsString()
+  @IsEmail()
   public email: string = "";
 
   @ApiProperty({ description: "URI of the player avatar" })
@@ -85,7 +89,7 @@ export class PlayerCreateApiV1 {
 
   @ApiProperty({ description: "Country of the player" })
   @IsNotEmpty()
-  @IsString()
+  @Matches(/^[A-Z]{2}$/, { message: "Country must be a 2-letter ISO code" })
   public country: string = "";
 }
 
@@ -97,14 +101,15 @@ export class PlayerUpdateApiV1 {
 
   @ApiProperty({ description: "Country of the player" })
   @IsNotEmpty()
-  @IsString()
+  @Matches(/^[A-Z]{2}$/, { message: "Country must be a 2-letter ISO code" })
   public country: string = "";
 
   @ApiProperty({
     description: "List of third-party identifiers associated with the player",
     type: [ThirdPartyIdentifierApiV1]
   })
-  @ValidateNested({ each: true }) // Valide chaque élément du tableau
-  @Type(() => ThirdPartyIdentifierApiV1) // Spécifie le type des éléments
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ThirdPartyIdentifierApiV1)
   public thirdPartyIdentifiers: ThirdPartyIdentifierApiV1[] = [];
 }
