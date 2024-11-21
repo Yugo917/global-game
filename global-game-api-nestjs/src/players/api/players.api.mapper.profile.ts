@@ -7,7 +7,7 @@ import { PlayerApiV1, PlayerCreateApiV1, PlayerUpdateApiV1 } from "./players.mod
 export class PlayerApiMapperProfile extends MapperProfile {
     public constructor(@Inject(MODULE_KEY_MAPPER) mapper: Mapper) {
         super(mapper);
-        const options: IMappingOptions = {
+        const options: IMappingOptions<object> = {
             ignorePattern: /^_/ // Ignore private properties that start with an underscore
         };
 
