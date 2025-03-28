@@ -31,6 +31,8 @@ async function bootstrap(): Promise<void> {
   // Set up Swagger UI endpoint
   SwaggerModule.setup("swagger", app, document);
 
+  //
+  app.enableCors();
   await app.listen(3000);
 
   console.log("✔️ - Server is running on port 3000");
