@@ -47,6 +47,7 @@ describe("PlayersController (Unit)", () => {
                 name: "John Doe",
                 email: "john.doe@example.com",
                 avatarUri: "http://example.com/avatar.png",
+                avatarName: "penguin",
                 country: "US",
                 thirdPartyIdentifiers: [{ id: "google_id", name: "google_name", email: "google_email@gmail.com", avatarUri: "google_avatarURI", gameServiceProvider: "GoogleGames" }],
                 isBanned: false,
@@ -73,6 +74,7 @@ describe("PlayersController (Unit)", () => {
             name: "John Doe",
             email: "john.doe@example.com",
             avatarUri: "http://example.com/avatar.png",
+            avatarName: "seal",
             country: "US",
             thirdPartyIdentifiers: [],
             isBanned: false,
@@ -95,6 +97,7 @@ describe("PlayersController (Unit)", () => {
             name: "John Doe",
             email: "john.doe@example.com",
             avatarUri: "http://example.com/avatar.png",
+            avatarName: "chicken",
             country: "US"
         };
         const createdPlayer: Player = {
@@ -102,6 +105,7 @@ describe("PlayersController (Unit)", () => {
             name: playerCreateDto.name,
             email: playerCreateDto.email,
             avatarUri: playerCreateDto.avatarUri,
+            avatarName: playerCreateDto.avatarName,
             country: playerCreateDto.country,
             thirdPartyIdentifiers: [],
             isBanned: false,
@@ -122,6 +126,7 @@ describe("PlayersController (Unit)", () => {
         // Arrange
         const playerId = "123";
         const updateDto: PlayerUpdateApiV1 = {
+            avatarName: "blue_hippo",
             avatarUri: "http://example.com/new-avatar.png",
             country: "CA",
             thirdPartyIdentifiers: [{ id: "google_id", name: "google_name", email: "google_email@gmail.com", avatarUri: "google_avatarURI", gameServiceProvider: "GoogleGames" }]
@@ -131,6 +136,7 @@ describe("PlayersController (Unit)", () => {
             name: "John Doe",
             email: "john.doe@example.com",
             avatarUri: updateDto.avatarUri,
+            avatarName: updateDto.avatarName!,
             country: updateDto.country,
             thirdPartyIdentifiers: [{ id: "google_id", name: "google_name", email: "google_email@gmail.com", avatarUri: "google_avatarURI", gameServiceProvider: "GoogleGames" }],
             isBanned: false,
@@ -145,6 +151,7 @@ describe("PlayersController (Unit)", () => {
 
         // Assert
         expect(result.id).toBe(playerId);
+        expect(result.avatarName).toBe(updateDto.avatarName);
         expect(result.avatarUri).toBe(updateDto.avatarUri);
         expect(result.thirdPartyIdentifiers).toEqual(updateDto.thirdPartyIdentifiers);
     });
@@ -166,6 +173,7 @@ describe("PlayersController (Unit)", () => {
             name: "John Doe",
             email: "john.doe@example.com",
             avatarUri: "http://example.com/avatar.png",
+            avatarName: "giraffe",
             country: "US",
             thirdPartyIdentifiers: [],
             isBanned: false,
