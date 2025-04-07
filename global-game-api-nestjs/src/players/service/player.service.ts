@@ -30,6 +30,7 @@ export class PlayersService {
       name: createPlayer.name,
       email: createPlayer.email,
       avatarUri: createPlayer.avatarUri,
+      avatarName: createPlayer.avatarName,
       country: createPlayer.country,
       thirdPartyIdentifiers: [],
       playerId: uuidv4(),
@@ -47,6 +48,7 @@ export class PlayersService {
       { playerId: id },
       {
         avatarUri: updatedData.avatarUri,
+        avatarName: updatedData.avatarName,
         country: updatedData.country,
         thirdPartyIdentifiers: updatedData.thirdPartyIdentifiers,
         updateDate: new Date()

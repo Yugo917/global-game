@@ -21,6 +21,7 @@ export class DbPlayerMapper {
       name: playerDocument.name,
       email: playerDocument.email,
       avatarUri: playerDocument.avatarUri,
+      avatarName: playerDocument.avatarName,
       country: playerDocument.country,
       thirdPartyIdentifiers: thirdPartyIdentifiers,
       isBanned: playerDocument.isBanned,

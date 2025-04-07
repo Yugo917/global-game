@@ -1,8 +1,18 @@
+type AvatarName =
+  | "zebra" | "rabbit" | "rhino" | "buffalo" | "crocodile"
+  | "seal" | "pig" | "hippo" | "giraffe" | "ostrich"
+  | "walrus" | "penguin" | "bear" | "snake" | "chicken"
+  | "gecko" | "macaw" | "horse" | "elephant" | "duck"
+  | "sloth" | "panda" | "blue_hippo" | "eagle" | "moose"
+  | "gray_rhino" | "owl" | "gorilla" | "koala" | "camel" | "unknown";
+
+
 export class Player {
   public id: string = "";
   public name: string = "";
   public email: string = "";
   public avatarUri: string = "";
+  public avatarName: AvatarName = "unknown";
   public country: string = "";
   public thirdPartyIdentifiers: ThirdPartyIdentifier[] = [];
   public isBanned: boolean = false;
@@ -25,12 +35,14 @@ export class CreatePlayer {
   public name: string = "";
   public email: string = "";
   public avatarUri: string = "";
+  public avatarName: AvatarName = "unknown";
   public country: string = "";
   private __isCreatePlayer?: unknown;
 }
 
 export class UpdatePlayer {
   public avatarUri: string = "";
+  public avatarName: AvatarName = "unknown";
   public country: string = "";
   public thirdPartyIdentifiers: ThirdPartyIdentifier[] = [];
   private __isUpdatePlayer?: unknown;

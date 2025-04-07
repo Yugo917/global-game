@@ -35,6 +35,7 @@ describe("PlayersService (Integration)", () => {
                 name: uuidv4(),
                 email: `${uuidv4()}@gmail.com`,
                 avatarUri: `http://example.com/${uuidv4()}.png`,
+                avatarName: "bear",
                 country: "FR"
             };
             const createdPlayer1 = await playersService.create(player1Data);
@@ -43,6 +44,7 @@ describe("PlayersService (Integration)", () => {
                 name: player1Data.name,
                 email: player1Data.email,
                 avatarUri: player1Data.avatarUri,
+                avatarName: player1Data.avatarName,
                 country: player1Data.country,
                 thirdPartyIdentifiers: [],
                 isBanned: false,
@@ -54,6 +56,7 @@ describe("PlayersService (Integration)", () => {
                 name: uuidv4(),
                 email: `${uuidv4()}@gmail.com`,
                 avatarUri: `http://example.com/${uuidv4()}.png`,
+                avatarName: "rabbit",
                 country: "US"
             };
             const createdPlayer2 = await playersService.create(player2Data);
@@ -62,6 +65,7 @@ describe("PlayersService (Integration)", () => {
                 name: player2Data.name,
                 email: player2Data.email,
                 avatarUri: player2Data.avatarUri,
+                avatarName: player2Data.avatarName,
                 country: player2Data.country,
                 thirdPartyIdentifiers: [],
                 isBanned: false,
@@ -69,7 +73,6 @@ describe("PlayersService (Integration)", () => {
                 updateDate: createdPlayer2.updateDate,
                 creationDate: createdPlayer2.creationDate
             }
-
 
             // Act
             const players = await playersService.findAll();
@@ -101,6 +104,7 @@ describe("PlayersService (Integration)", () => {
                 name: uuidv4(),
                 email: `${uuidv4()}@gmail.com`,
                 avatarUri: `http://example.com/${uuidv4()}.png`,
+                avatarName: "zebra",
                 country: "CA"
             }
             const createdPlayer = await playersService.create(player);
@@ -124,6 +128,7 @@ describe("PlayersService (Integration)", () => {
                 name: uuidv4(),
                 email: `${uuidv4()}@gmail.com`,
                 avatarUri: `http://example.com/${uuidv4()}.png`,
+                avatarName: "penguin",
                 country: "FR"
             };
 
@@ -135,6 +140,7 @@ describe("PlayersService (Integration)", () => {
                 name: playerData.name,
                 email: playerData.email,
                 avatarUri: playerData.avatarUri,
+                avatarName: playerData.avatarName,
                 country: playerData.country,
                 thirdPartyIdentifiers: [],
                 isActive: true,
@@ -163,12 +169,14 @@ describe("PlayersService (Integration)", () => {
                 name: uuidv4(),
                 email: `${uuidv4()}@gmail.com`,
                 avatarUri: `http://example.com/${uuidv4()}.png`,
+                avatarName: "hippo",
                 country: "GR"
             };
             const createdPlayer = await playersService.create(playerData);
 
             const updatePlayerData: UpdatePlayer = {
                 avatarUri: `http://example.com/${uuidv4()}.png`,
+                avatarName: "koala",
                 country: "FR",
                 thirdPartyIdentifiers: [{ id: "google_id", name: "google_name", email: "google_email@gmail.com", avatarUri: "google_avatarURI", gameServiceProvider: "Unknown" }]
             }
@@ -182,7 +190,12 @@ describe("PlayersService (Integration)", () => {
 
         it("update_WithNonExistingPlayer_ShouldThrowError", async () => {
             // Arrange
-            const updatedData: UpdatePlayer = { avatarUri: "http://example.com/updated-avatar.png", country: "Spain", thirdPartyIdentifiers: [] };
+            const updatedData: UpdatePlayer = {
+                avatarUri: "http://example.com/updated-avatar.png",
+                avatarName: "owl",
+                country: "Spain",
+                thirdPartyIdentifiers: []
+            };
 
             // Act & Assert
             await expect(playersService.update("nonexistent-id", updatedData)).rejects.toThrow("Player with id nonexistent-id not found");
@@ -196,6 +209,7 @@ describe("PlayersService (Integration)", () => {
                 name: uuidv4(),
                 email: `${uuidv4()}@gmail.com`,
                 avatarUri: "http://example.com/avatar5.png",
+                avatarName: "duck",
                 country: "NE"
             });
 
@@ -218,6 +232,7 @@ describe("PlayersService (Integration)", () => {
                 name: uuidv4(),
                 email: `${uuidv4()}@gmail.com`,
                 avatarUri: "http://example.com/avatar6.png",
+                avatarName: "camel",
                 country: "BR"
             });
 
@@ -234,6 +249,7 @@ describe("PlayersService (Integration)", () => {
                 name: uuidv4(),
                 email: `${uuidv4()}@gmail.com`,
                 avatarUri: "http://example.com/avatar7.png",
+                avatarName: "moose",
                 country: "AR"
             });
 

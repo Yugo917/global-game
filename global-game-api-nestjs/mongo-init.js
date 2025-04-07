@@ -35,6 +35,16 @@ db.createCollection('player-v1', {
           bsonType: 'string',
           description: 'Avatar URI must be a string and is required',
         },
+        avatarName: {
+          bsonType: 'string',
+          description: 'Avatar name (e.g., zebra, rabbit)',
+          enum: ["zebra", "rabbit", "rhino", "buffalo", "crocodile"
+            , "seal", "pig", "hippo", "giraffe", "ostrich"
+            , "walrus", "penguin", "bear", "snake", "chicken"
+            , "gecko", "macaw", "horse", "elephant", "duck"
+            , "sloth", "panda", "blue_hippo", "eagle", "moose"
+            , "gray_rhino", "owl", "gorilla", "koala", "camel"],
+        },
         country: {
           bsonType: 'string',
           description: 'Country must be a 2-letter ISO code and is required',
@@ -99,6 +109,7 @@ db.getCollection('player-v1').insertMany([
     name: 'John Doe',
     email: 'john.doe@example.com',
     avatarUri: 'https://example.com/avatar1.png',
+    avatarName: 'crocodile',
     country: 'US',
     thirdPartyIdentifiers: [
       {
@@ -119,6 +130,7 @@ db.getCollection('player-v1').insertMany([
     name: 'Jane Smith',
     email: 'jane.smith@example.com',
     avatarUri: 'https://example.com/avatar2.png',
+    avatarName: 'snake',
     country: 'CA',
     thirdPartyIdentifiers: [
       {

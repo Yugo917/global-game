@@ -3,7 +3,7 @@ import { INestApplication } from "@nestjs/common";
 import request from "supertest";
 import { MongooseModule } from "@nestjs/mongoose";
 import { PlayersModule } from "src/players/module/players.module";
-import { PlayerCreateApiV1 } from "src/players/api/players.models.dto";
+import { AvatarNameApiV1, PlayerCreateApiV1 } from "src/players/api/players.models.dto";
 import * as dotenv from "dotenv";
 import { PlayersService } from "src/players/service/player.service";
 import { getAppValidationPipe } from "src/main";
@@ -50,6 +50,7 @@ describe("PlayersController (Integration)", () => {
                 name: "John Doe",
                 email: "john.doe@example.com",
                 avatarUri: "http://example.com/avatar1.png",
+                avatarName: "zebra",
                 country: "US"
             });
 
@@ -77,6 +78,7 @@ describe("PlayersController (Integration)", () => {
                 name: "John Doe",
                 email: "john.doe@example.com",
                 avatarUri: "http://example.com/avatar2.png",
+                avatarName: "rabbit",
                 country: "CN"
             });
 
@@ -99,6 +101,7 @@ describe("PlayersController (Integration)", () => {
                 name: "John Doe",
                 email: "john.doe@example.com",
                 avatarUri: "http://example.com/avatar3.png",
+                avatarName: "penguin" as AvatarNameApiV1,
                 country: "FR"
             };
             const response = await createPlayer(playerData);
@@ -124,10 +127,12 @@ describe("PlayersController (Integration)", () => {
                 name: "John Doe",
                 email: "john.doe@example.com",
                 avatarUri: "http://example.com/avatar4.png",
+                avatarName: "hippo",
                 country: "GR"
             });
             const updatedData = {
                 avatarUri: "http://example.com/updated-avatar.png",
+                avatarName: "koala",
                 country: "SP",
                 thirdPartyIdentifiers: [{ id: "google_id", name: "google_name", email: "google_email@gmail.com", avatarUri: "google_avatarURI", gameServiceProvider: "Unknown" }]
             };
@@ -145,6 +150,7 @@ describe("PlayersController (Integration)", () => {
         it("update_WithNonExistingPlayer_ShouldThrowError", async () => {
             const updatedData = {
                 avatarUri: "http://example.com/updated-avatar.png",
+                avatarName: "owl",
                 country: "SP"
             };
             await request(app.getHttpServer()).put("/players/nonexistent-id").send(updatedData).expect(404);
@@ -156,6 +162,7 @@ describe("PlayersController (Integration)", () => {
                 name: "John Doe",
                 email: "john.doe@example.com",
                 avatarUri: "http://example.com/avatar5.png",
+                avatarName: "sloth",
                 country: "IT"
             });
             const invalidData = { avatarUri: "" }; // Missing required data
@@ -173,6 +180,7 @@ describe("PlayersController (Integration)", () => {
                 name: "John Doe",
                 email: "john.doe@example.com",
                 avatarUri: "http://example.com/avatar6.png",
+                avatarName: "giraffe",
                 country: "PT"
             });
             const invalidData = { avatarUri: "invalid-uri", country: 123 }; // Invalid data
@@ -192,6 +200,7 @@ describe("PlayersController (Integration)", () => {
                 name: "John Doe",
                 email: "john.doe@example.com",
                 avatarUri: "http://example.com/avatar7.png",
+                avatarName: "elephant",
                 country: "NT"
             });
 
@@ -214,6 +223,7 @@ describe("PlayersController (Integration)", () => {
                 name: "John Doe",
                 email: "john.doe@example.com",
                 avatarUri: "http://example.com/avatar8.png",
+                avatarName: "camel",
                 country: "BR"
             });
 
@@ -231,6 +241,7 @@ describe("PlayersController (Integration)", () => {
                 name: "John Doe",
                 email: "john.doe@example.com",
                 avatarUri: "http://example.com/avatar9.png",
+                avatarName: "gorilla",
                 country: "AR"
             });
 
