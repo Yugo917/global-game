@@ -13,6 +13,7 @@ import { gorgeousTheme } from "./application/theme/gorgeousTheme";
 import { matrixTheme } from "./application/theme/matrixTheme";
 import { darkOrangeTheme } from "./application/theme/darkOrangeTheme";
 import { GlobalGameApiV1Context } from "./application/core/ioc/GlobalGameApi";
+import "./common/extentions/YupExtentions";
 
 export const AppStartup = () => {
   const globalGameClient = useMemo(() => new GlobalGameClient(1000), []);

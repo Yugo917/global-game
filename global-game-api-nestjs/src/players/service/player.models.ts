@@ -47,3 +47,16 @@ export class UpdatePlayer {
   public thirdPartyIdentifiers: ThirdPartyIdentifier[] = [];
   private __isUpdatePlayer?: unknown;
 }
+
+export class PlayerSearchCriteria {
+  public ids?: string[];;
+  public names?: string[];;
+  public emails?: string[];;
+  public thirdPartyIds?: string[];
+  public thirdPartyNames?: string[];
+  public thirdPartyEmails?: string[];
+  public creationDateStart?: Date;
+  public creationDateEnd?: Date;
+  public nbRows: number = 0;
+  private __isSearchCriteria?: unknown;
+}

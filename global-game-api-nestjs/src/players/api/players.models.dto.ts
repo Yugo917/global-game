@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsArray, IsEmail, IsEnum, IsNotEmpty, IsString, Matches, ValidateNested } from "class-validator";
+import { IsArray, IsDate, IsEmail, IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, Matches, Min, ValidateNested } from "class-validator";
 
 export type AvatarNameApiV1 =
   | "zebra" | "rabbit" | "rhino" | "buffalo" | "crocodile"
@@ -163,4 +163,89 @@ export class PlayerUpdateApiV1 {
   @ValidateNested({ each: true })
   @Type(() => ThirdPartyIdentifierApiV1)
   public thirdPartyIdentifiers: ThirdPartyIdentifierApiV1[] = [];
+}
+
+export class PlayerSearchCriteriaApiV1 {
+  @ApiPropertyOptional({
+    description: "Unique identifier of the players",
+    type: [String]
+  })
+  @IsOptional()
+  @IsString({ each: true })
+  public ids?: string[];
+
+  @ApiPropertyOptional({
+    description: "Names of the players",
+    type: [String]
+  })
+  @IsOptional()
+  @IsString({ each: true })
+  public names?: string[];
+
+  @ApiPropertyOptional({
+    description: "Emails of the players",
+    type: [String]
+  })
+  @IsOptional()
+  @IsString({ each: true })
+  public emails?: string[];
+
+  @ApiPropertyOptional({
+    description: "List of third-party identifiers associated with the player",
+    type: [String]
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  public thirdPartyIds?: string[];
+
+  @ApiPropertyOptional({
+    description: "List of third-party names associated with the player",
+    type: [String]
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  public thirdPartyNames?: string[];
+
+  @ApiPropertyOptional({
+    description: "List of third-party emails associated with the player",
+    type: [String]
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  public thirdPartyEmails?: string[];
+
+
+  @ApiPropertyOptional({
+    description: "Start date for creation date filter (inclusive)",
+    type: String,
+    format: "date-time",
+    example: "2023-01-01T00:00:00.000Z"
+  })
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  public creationDateStart?: Date;
+
+  @ApiPropertyOptional({
+    description: "End date for creation date filter (inclusive)",
+    type: String,
+    format: "date-time",
+    example: "2023-12-31T23:59:59.999Z"
+  })
+  @IsOptional()
+  @IsDate()
+  @Type(() => Date)
+  public creationDateEnd?: Date;
+
+
+  @ApiProperty({
+    description: "Number of players to return",
+    example: 100
+  })
+  @IsInt()
+  @Min(1)
+  public nbRows: number = 100;
 }

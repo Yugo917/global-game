@@ -56,7 +56,8 @@ export const PlayerV1Schema = new Schema({
   },
   thirdPartyIdentifiers: {
     type: [ThirdPartyIdentifierV1Schema],
-    required: true
+    required: true,
+    default: []
   },
   isBanned: { type: Boolean, required: true },
   isActive: { type: Boolean, required: true },

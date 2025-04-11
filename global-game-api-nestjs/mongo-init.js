@@ -106,8 +106,8 @@ db.createCollection('player-v1', {
 db.getCollection('player-v1').insertMany([
   {
     playerId: 'd41d8cd9-8f00-3204-a980-001f60c5ed5f',
-    name: 'John Doe',
-    email: 'john.doe@example.com',
+    name: 'Full John Doe',
+    email: 'full.john.doe@example.com',
     avatarUri: 'https://example.com/avatar1.png',
     avatarName: 'crocodile',
     country: 'US',
@@ -115,10 +115,17 @@ db.getCollection('player-v1').insertMany([
       {
         id: 'tpid-12345',
         name: 'Google Account',
-        email: 'john.doe@gmail.com',
+        email: 'john.doe1@gmail.com',
         avatarUri: 'https://example.com/google-avatar.png',
         gameServiceProvider: 'GoogleGames',
       },
+      {
+        id: 'tpid-123456',
+        name: 'Apple Game Center',
+        email: 'john.doe2@gmail.com',
+        avatarUri: 'https://example.com/apple-avatar.png',
+        gameServiceProvider: 'GameCenter',
+      }
     ],
     isBanned: false,
     isActive: true,
@@ -146,7 +153,90 @@ db.getCollection('player-v1').insertMany([
     updateDate: new Date(),
     creationDate: new Date(),
   },
+  {
+    playerId: 'c56a4180-65aa-42ec-a945-5fd21dec0599',
+    name: 'Jane Smith 2',
+    email: 'jane.smith2@example.com',
+    avatarUri: 'https://example.com/avatar2.png',
+    avatarName: 'snake',
+    country: 'US',
+    thirdPartyIdentifiers: [
+      {
+        id: 'tpid-678999',
+        name: 'Apple Game Center',
+        email: 'jane.smith2@icloud.com',
+        avatarUri: 'https://example.com/apple-avatar.png',
+        gameServiceProvider: 'GameCenter',
+      },
+    ],
+    isBanned: false,
+    isActive: true,
+    updateDate: new Date(),
+    creationDate: new Date(),
+  },
 ]);
+
+db.getCollection('game-v1').insertMany([
+  {
+    id: '7a1f3c0a-3b7f-4c3f-a8e5-1a2b3c4d5e6f',
+    name: 'Fifa 2025',
+    badgeUri: 'https://example.com/fifa-2025.png',
+    isActive: true,
+    appStore: 'Steam',
+    thirdPartyIdentifiers: [
+      {
+        id: 'steam-123',
+        name: 'Steam Store',
+        appStore: 'Steam'
+      },
+      {
+        id: 'ps-456',
+        name: 'Playstation Store',
+        appStore: 'PlaystationStore'
+      }
+    ],
+    updateDate: new Date(),
+    creationDate: new Date()
+  },
+  {
+    id: 'b2d2f5e7-4a8b-4b7c-9c71-8c9e0d4b7e2f',
+    name: 'Call of Duty Mobile',
+    badgeUri: 'https://example.com/cod-mobile.png',
+    isActive: true,
+    appStore: 'GooglePlayStore',
+    thirdPartyIdentifiers: [
+      {
+        id: 'gp-789',
+        name: 'Google Play Store',
+        appStore: 'GooglePlayStore'
+      },
+      {
+        id: 'as-321',
+        name: 'Apple Store',
+        appStore: 'AppelStore'
+      }
+    ],
+    updateDate: new Date(),
+    creationDate: new Date()
+  },
+  {
+    id: 'd8f7b6c5-9c8a-4d6e-8b9a-7f6e5d4c3b2a',
+    name: 'Zelda Breath of the Wild',
+    badgeUri: 'https://example.com/zelda.png',
+    isActive: true,
+    appStore: 'NintendoEShop',
+    thirdPartyIdentifiers: [
+      {
+        id: 'nes-987',
+        name: 'Nintendo eShop',
+        appStore: 'NintendoEShop'
+      }
+    ],
+    updateDate: new Date(),
+    creationDate: new Date()
+  }
+]);
+
 
 db.createUser({
   user: "gg-user",

@@ -3,7 +3,6 @@ import {
   Dialog, DialogContent, DialogTitle, IconButton, Typography, useTheme
 } from "@mui/material";
 import ReactJson from "react-json-view-ts";
-import GetAppIcon from "@mui/icons-material/GetApp";
 import CloseIcon from "@mui/icons-material/Close";
 import DownloadIcon from "@mui/icons-material/Download";
 import { ActionHelper } from "../../../helper/ActionHelper";

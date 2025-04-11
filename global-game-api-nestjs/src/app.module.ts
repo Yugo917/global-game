@@ -3,6 +3,7 @@ import { PlayersModule } from "./players/module/players.module";
 import { ConfigModule } from "@nestjs/config";
 import { LoggerModule } from "./common/logger/logger.module";
 import { MapperModule } from "./common/mapper/mapper.module";
+import { GamesModule } from "./games/module/games.module";
 
 
 @Module({
@@ -12,7 +13,8 @@ import { MapperModule } from "./common/mapper/mapper.module";
       isGlobal: true
     }),
     MapperModule,
-    PlayersModule
+    PlayersModule,
+    GamesModule
   ],
   controllers: [],
   providers: []

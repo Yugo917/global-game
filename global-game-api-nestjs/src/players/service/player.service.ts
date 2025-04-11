@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { IPlayerDocument, PlayerDocument, Playerv1CollectionName } from "./player.schema";
-import { CreatePlayer, Player, UpdatePlayer } from "./player.models";
+import { CreatePlayer, Player, PlayerSearchCriteria, UpdatePlayer } from "./player.models";
 import { v4 as uuidv4 } from "uuid";
 import { DbPlayerMapper } from "./players.db.model.mapper";
 
@@ -24,6 +24,56 @@ export class PlayersService {
     }
     return DbPlayerMapper.mapToEntity(player);
   }
+
+  public async search(criteria: PlayerSearchCriteria): Promise<Player[]> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const mongoQuery: Record<string, any> = {};
+
+    if (criteria.ids?.length) {
+      mongoQuery.playerId = { $in: criteria.ids };
+    }
+
+    if (criteria.names?.length) {
+      mongoQuery.name = { $in: criteria.names.map(name => new RegExp(name, "i")) };
+    }
+
+    if (criteria.emails?.length) {
+      mongoQuery.email = { $in: criteria.emails.map(email => new RegExp(email, "i")) };
+    }
+
+    if (criteria.thirdPartyIds?.length) {
+      mongoQuery["thirdParties.id"] = { $in: criteria.thirdPartyIds };
+    }
+
+    if (criteria.thirdPartyNames?.length) {
+      mongoQuery["thirdParties.name"] = { $in: criteria.thirdPartyNames };
+    }
+
+    if (criteria.thirdPartyEmails?.length) {
+      mongoQuery["thirdParties.email"] = { $in: criteria.thirdPartyEmails };
+    }
+
+    if (criteria.creationDateStart || criteria.creationDateEnd) {
+      mongoQuery.creationDate = {};
+      if (criteria.creationDateStart) {
+        mongoQuery.creationDate.$gte = criteria.creationDateStart;
+      }
+      if (criteria.creationDateEnd) {
+        mongoQuery.creationDate.$lte = criteria.creationDateEnd;
+      }
+    }
+
+    console.log("mongoQuery", mongoQuery);
+
+    const players = await this.playerModel
+      .find(mongoQuery)
+      .limit(criteria.nbRows)
+      .lean()
+      .exec();
+
+    return players.map(DbPlayerMapper.mapToEntity);
+  }
+
 
   public async create(createPlayer: CreatePlayer): Promise<Player> {
     const newPlayer: IPlayerDocument = {

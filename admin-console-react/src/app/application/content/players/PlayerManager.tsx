@@ -4,7 +4,7 @@ import {
 } from "@mui/x-data-grid";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { Avatar, IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 import ReactCountryFlag from "react-country-flag";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
@@ -15,10 +15,16 @@ import HideSourceIcon from "@mui/icons-material/HideSource";
 import { DatagridToolbar } from "../../../common/components/mui/dataGrid/DatagridToolbar";
 import { IDataGridRowsInfos } from "../../../common/components/mui/dataGrid/GridToolBarGridRowInfos";
 import { useGlobalGameApiV1 } from "../../core/ioc/GlobalGameApi";
-import { IPlayerDtoV1, IPlayerSearchCriteriaDtoV1 } from "../../../clients/v1/ModelsApiV1";
+import { IPlayerDtoV1 } from "../../../clients/v1/ModelsApiV1";
 import { FormSearchDialog } from "../../../common/components/mui/dialog/FormSearchDialog";
 import { ActionMenu, IActionMenuItem } from "../../../common/components/navigation/ActionsMenu";
 import { ObjectViewerDialog } from "../../../common/components/mui/dialog/ObjectViewerDialog";
+import { IPlayerSearchCriteria } from "./models/PlayerSearchCriteria";
+import { PlayerMapper } from "./models/PlayerMapper";
+import { GGAvatar } from "../../../common/components/Avatar";
+import { ObjectEditerDialog } from "../../../common/components/mui/dialog/ObjectEditerDialog";
+import { alertNotImplemented } from "../../../common/helper/NotImplementedHelper";
+import { BooleanChips, InvertedBooleanChips } from "../../../common/components/mui/dataGrid/columns/BooleanChips";
 
 enum playerManagerAction {
   view = "view",
@@ -34,14 +40,15 @@ export function PlayerManager() {
   const globalGameClient = useGlobalGameApiV1();
   // const players = PlayerFactory.CreatePlayers(10);
   const [players, setPlayers] = useState<IPlayerDtoV1[]>([]);
-  const [searchCriteria, setSearchCriteria] = useState<IPlayerSearchCriteriaDtoV1 | undefined>(undefined);
+  const [searchCriteria, setSearchCriteria] = useState<IPlayerSearchCriteria | undefined>(undefined);
   const [openSearchDialog, setOpenSearchDialog] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState<IPlayerDtoV1 | undefined>(undefined);
   const [checkedRowDataIds, setCheckedRowDataIdsctedRowData] = useState<GridRowId[] | undefined>(undefined);
   const [actionMenuAnchor, setActionMenuAnchor] = useState<null | HTMLElement>(null);
   const [gridRowsInfos, setGridRowsInfos] = useState<IDataGridRowsInfos>({ loadedRowCount: 0, filteredRowCount: 0, checkedRowCount: 0 });
   const [isLoading, setIsLoading] = useState(false);
-  const [openPlayerDialog, setOpenPlayerDialog] = useState(false);
+  const [openPlayerViewDialog, setOpenPlayerViewDialog] = useState(false);
+  const [openPlayerEditorDialog, setOpenPlayerEditorDialog] = useState(false);
   const apiRef = useGridApiRef();
 
   useEffect(() => {
@@ -52,7 +59,10 @@ export function PlayerManager() {
     try {
       setIsLoading(true);
       if (searchCriteria) {
-        const res = await globalGameClient.getPlayers();
+        console.log("searchCriteria", searchCriteria);
+        const searchCriteriaDto = PlayerMapper.toPlayerSearchCriteriaDtoV1(searchCriteria);
+        console.log("searchCriteriaDto", searchCriteriaDto);
+        const res = await globalGameClient.searchPlayer(searchCriteriaDto);
         setPlayers(res);
         setGridRowsInfos(prev => ({
           ...prev,
@@ -66,9 +76,11 @@ export function PlayerManager() {
 
   const onActionClicked = (action: playerManagerAction, player: IPlayerDtoV1) => {
     if (action === playerManagerAction.view) {
-      setOpenPlayerDialog(true);
+      setOpenPlayerViewDialog(true);
+    } else if (action === playerManagerAction.edit) {
+      setOpenPlayerEditorDialog(true);
     } else {
-      alert("Not Implemented");
+      alertNotImplemented(player);
     }
     onRowActionMenuClose();
   };
@@ -84,6 +96,7 @@ export function PlayerManager() {
           aria-label="actions"
           size="small"
           onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+            console.log("params.row", params.row);
             setSelectedRowData(params.row as IPlayerDtoV1);
             onRowActionMenuOpen(event);
           }}
@@ -101,12 +114,12 @@ export function PlayerManager() {
       field: "email", headerName: "Email", flex: 1, valueGetter: (params: GridValueGetterParams) => (params.row as IPlayerDtoV1).email
     },
     {
-      field: "avatar",
+      field: "avatarName",
       headerName: "Avatar",
       flex: 1,
-      valueGetter: (params: GridValueGetterParams) => (params.row as IPlayerDtoV1).avatarUri,
+      valueGetter: (params: GridValueGetterParams) => (params.row as IPlayerDtoV1).avatarName,
       renderCell: (params: GridRenderCellParams) => (
-        <Avatar alt={params.value.toString()} src={params.value.toString()} />
+        <div style={{ scale: "0.5" }}><GGAvatar avatarName={params.value.toString()} size={64} /></div>
       )
     },
     {
@@ -127,10 +140,20 @@ export function PlayerManager() {
       )
     },
     {
-      field: "isActive", headerName: "IsActive", flex: 1, valueGetter: (params: GridValueGetterParams) => (params.row as IPlayerDtoV1).isActive
+      field: "isActive",
+      headerName: "IsActive",
+      flex: 1,
+      valueGetter: (params: GridValueGetterParams) => (params.row as IPlayerDtoV1).isActive,
+      renderCell: (params: GridRenderCellParams) => (<BooleanChips value={params.value as boolean} />)
+
     },
     {
-      field: "isBanned", headerName: "IsBanned", flex: 1, valueGetter: (params: GridValueGetterParams) => (params.row as IPlayerDtoV1).isBanned
+      field: "isBanned",
+      headerName: "IsBanned",
+      flex: 1,
+      valueGetter: (params: GridValueGetterParams) => (params.row as IPlayerDtoV1).isBanned,
+      renderCell: (params: GridRenderCellParams) => (<BooleanChips value={params.value as boolean} />)
+
     },
     {
       field: "updateDate", headerName: "UpdateDate", width: 200, valueFormatter: (params: GridValueFormatterParams) => moment(params.value).local().format("YYYY-MM-DD hh:mm:ss a")
@@ -146,13 +169,13 @@ export function PlayerManager() {
       name: "ban-all",
       label: "Ban ALl",
       icon: BlockIcon,
-      onClick: () => { alert(JSON.stringify(checkedRowDataIds)); }
+      onClick: () => { alertNotImplemented(checkedRowDataIds); }
     },
     {
       name: "deactive-all",
       label: "Deactive All",
       icon: HideSourceIcon,
-      onClick: () => { alert(JSON.stringify(checkedRowDataIds)); }
+      onClick: () => { alertNotImplemented(checkedRowDataIds); }
     }
   ];
 
@@ -164,27 +187,28 @@ export function PlayerManager() {
   const formId = "search-dialog-form";
 
   const schema = yup.object({
-    id: yup.string().notRequired().uuid("Enter a valid GUID"),
-    name: yup.string().notRequired(),
-    email: yup.string().notRequired().email("Enter a valid email"),
+    ids: yup.string().notRequired().uuids(),
+    names: yup.string().notRequired(),
+    emails: yup.string().notRequired().emails(),
+    thirdPartyIds: yup.string().notRequired().uuids(),
+    thirdPartyNames: yup.string().notRequired(),
+    thirdPartyEmails: yup.string().notRequired().emails(),
     creationDateStart: yup.date().notRequired(),
     creationDateEnd: yup.date().notRequired(),
-    pageIndex: yup.number().notRequired(),
-    nbRowPerPage: yup.number().notRequired(),
-    limit: yup.number().required(),
-    gameId: yup.string().notRequired().uuid("Enter a valid GUID")
+    nbRows: yup.number().required()
   });
 
-  const defaultValues: IPlayerSearchCriteriaDtoV1 = {
-    id: null,
-    name: null,
-    email: null,
+  const defaultSearchValue = {
+
+    ids: null,
+    names: null,
+    emails: null,
+    thirdPartyIds: null,
+    thirdPartyNames: null,
+    thirdPartyEmails: null,
     creationDateStart: null,
     creationDateEnd: null,
-    pageIndex: null,
-    nbRowPerPage: null,
-    limit: 200,
-    gameId: null
+    nbRows: 200
   };
 
   // __ Row Actions
@@ -230,7 +254,7 @@ export function PlayerManager() {
         title="Player search criteria"
         formId={formId}
         schema={schema}
-        searchCriteria={defaultValues}
+        searchCriteria={searchCriteria ?? defaultSearchValue as any}
         open={openSearchDialog}
         onSearchClick={s => { toggleSearchDialog(); setSearchCriteria(s); }}
         onCancelClick={() => { toggleSearchDialog(); }}
@@ -245,13 +269,25 @@ export function PlayerManager() {
         />
       )}
 
-      {/* Row View */}
+      {/* Viewer */}
       {selectedRowData && (
         <ObjectViewerDialog
           name="player"
           object={selectedRowData}
-          open={openPlayerDialog}
-          onClose={() => setOpenPlayerDialog(false)}
+          open={openPlayerViewDialog}
+          onClose={() => setOpenPlayerViewDialog(false)}
+        />
+      )}
+
+      {/* Editor */}
+      {selectedRowData && (
+        <ObjectEditerDialog
+          title="player"
+          ojectName="player"
+          object={selectedRowData}
+          open={openPlayerEditorDialog}
+          onUpdateClick={obj => { alertNotImplemented(obj); setOpenPlayerEditorDialog(false); }}
+          onCloseClick={() => setOpenPlayerEditorDialog(false)}
         />
       )}
 

@@ -17,8 +17,8 @@ export interface IAppStoreDto {
 }
 
 export enum AppStore {
-  AppelStore = "GlobalGames",
-  GooglePlayStore = "GoogleGames",
+  AppelStore = "AppelStore",
+  GooglePlayStore = "GooglePlayStore",
   XiaomiStore = "XiaomiStore",
   Steam = "Steam",
 }

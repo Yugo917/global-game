@@ -7,7 +7,7 @@ import { ValidationPipe } from "@nestjs/common";
 export const getAppValidationPipe = (): ValidationPipe => new ValidationPipe({
   whitelist: true,   // Remove properties not present in the DTO
   forbidNonWhitelisted: true, // Throw an error if extra properties are provided
-  transform: false    // Automatically transform payloads to the expected DTO types
+  transform: true    // Automatically transform payloads to the expected DTO types
 });
 
 async function bootstrap(): Promise<void> {
