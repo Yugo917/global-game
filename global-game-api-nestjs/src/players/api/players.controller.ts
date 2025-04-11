@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Post, Body, Put, Delete, Patch, Inject } from "@nestjs/common";
 import { PlayersService } from "../service/player.service";
-import { PlayerApiV1, PlayerCreateApiV1, PlayerUpdateApiV1 } from "./players.models.dto";
+import { PlayerApiV1, PlayerCreateApiV1, PlayerSearchCriteriaApiV1, PlayerUpdateApiV1 } from "./players.models.dto";
 import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { CreatePlayer, Player, UpdatePlayer } from "../service/player.models";
 import { MODULE_KEY_MAPPER } from "src/common/mapper/mapper.module";
@@ -30,6 +30,16 @@ export class PlayersController {
   public async findOne(@Param("id") id: string): Promise<PlayerApiV1> {
     const player = await this.playersService.findOne(id);
     return this.mapper.map(player, Player, PlayerApiV1);
+  }
+
+  @Post("search")
+  @ApiOperation({ summary: "Search players by criteria" })
+  @ApiResponse({ status: 200, description: "List of players matching the criteria", type: [PlayerApiV1] })
+  public async search(@Body() criteria: PlayerSearchCriteriaApiV1): Promise<PlayerApiV1[]> {
+    const players: Player[] = await this.playersService.search(criteria);
+    return players.map(player =>
+      this.mapper.map(player, Player, PlayerApiV1),
+    );
   }
 
   @Post()

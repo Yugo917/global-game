@@ -25,7 +25,7 @@ export function GenericDialog(props: Iprops) {
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
       <DialogTitle>
-        <Typography variant="h6" color="primary">
+        <Typography variant="h6" component="span" color="primary">
           {title}
         </Typography>
         <IconButton
