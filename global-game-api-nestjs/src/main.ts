@@ -29,7 +29,9 @@ async function bootstrap(): Promise<void> {
   const document = SwaggerModule.createDocument(app, config);
 
   // Set up Swagger UI endpoint
-  SwaggerModule.setup("swagger", app, document);
+  SwaggerModule.setup("swagger", app, document, {
+    jsonDocumentUrl: "swagger/json"
+  });
 
   //
   app.enableCors();
